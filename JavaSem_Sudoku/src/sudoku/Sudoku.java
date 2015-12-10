@@ -6,7 +6,7 @@ import java.util.Random;
  * @author: LS
  * @version: 08/12/2015
  * @changelog:
- 	LS - Methode setSudoku angepasst
+ *	LS - Methode setSudoku angepasst
  * @desc: Object, welches die Informationen zum aktuell gespielten Sudoku enthält.
  */
 
@@ -46,12 +46,12 @@ public class Sudoku {
 	 * 
 	 * @desc: set-Methode für Position x/y in arySudoku
 	 */
-	public void setSudoku(int x, char c, int value) {
+	public void setSudoku(int y, char c, int value) {
 		// Konvertiere Char c in Integer (A = 65 in UTF-16, B = 66, usw.)
 		// y Wert in Array berechnen durch c - 65 (bspw. c = "A" -> y = 65 - 65 = 0)
-		int y = c - 65;
+		int x = c - 65;
 		// Decrement x (Array-Lowerbound ist 0, eingegebene Koordinaten beginnend bei 1)
-		--x;
+		--y;
 		arySudoku[y][x] = value;
 	}
 
@@ -74,8 +74,6 @@ public class Sudoku {
 				// Zufallszahl von 1 - 9 in 9x9 Matrix arySudoku schreiben
 				arySudoku[i][j] = rnd.nextInt(8) + 1;
 			}
-
 		}
 	}
-
 }

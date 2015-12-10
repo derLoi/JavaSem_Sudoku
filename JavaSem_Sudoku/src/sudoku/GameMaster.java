@@ -11,15 +11,21 @@ public class GameMaster {
 
 	public static void main(String[] args) {
 		Sudoku sudoku = new Sudoku();
+		SudokuChecker check = new SudokuChecker();
 
 		sudoku.genSudoku();
 
 		drawBoard(sudoku.getSudoku());
 
-		// Test für Änderungen in setSudoku!
+		//Test Reihen und Spalten prüfen
+		check.checkSudoku(sudoku.getSudoku());
+		
+		
+		/*
+		// Test für Änderungen in setSudoku
 		sudoku.setSudoku(9, 'I', 0);
 		drawBoard(sudoku.getSudoku());
-
+		*/
 	}
 
 	/*
