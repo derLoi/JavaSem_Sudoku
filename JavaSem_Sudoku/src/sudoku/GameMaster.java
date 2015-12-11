@@ -2,9 +2,10 @@ package sudoku;
 
 /*
  * @author: LS 
- * @version: 08/12/2015
+ * @version: 11/12/2015
  * @changelog:
  * 		TM: Überarbeitetungen der Spielfeldanzeige
+ * 		LS: Test mit Gültigkeitsprüfung für zufällig generiertes Sudoku. Ausgabe Ergebnisse
  * @desc: kontrolliert den Spielablauf.
  */
 public class GameMaster {
@@ -18,6 +19,7 @@ public class GameMaster {
 		drawBoard(sudoku.getSudoku());
 
 		// Test Reihen und Spalten prüfen
+		// Um mehr Zahlen im Sudoku zu generieren, muss das obere Limit für j in der genSudoku-Methode angepasst werden
 		check.checkSudoku(sudoku.getSudoku());
 		for (int i = 0; i <= 8; i++) {
 			System.out.println("Reihe " + (i+1) + ": " + check.getErrInRow()[i] + " | Spalte " + (i+1) + ": " + check.getErrInCol()[i] + " | Box "+ (i+1)+ ": "+ check.getErrInBox()[i]);
