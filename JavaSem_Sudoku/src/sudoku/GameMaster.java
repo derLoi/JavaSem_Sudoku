@@ -17,15 +17,16 @@ public class GameMaster {
 
 		drawBoard(sudoku.getSudoku());
 
-		//Test Reihen und Spalten prüfen
+		// Test Reihen und Spalten prüfen
 		check.checkSudoku(sudoku.getSudoku());
-		
-		
+		for (int i = 0; i <= 8; i++) {
+			System.out.println("Reihe " + (i+1) + ": " + check.getErrInRow()[i] + " | Spalte " + (i+1) + ": " + check.getErrInCol()[i] + " | Box "+ (i+1)+ ": "+ check.getErrInBox()[i]);
+		}
+
 		/*
-		// Test für Änderungen in setSudoku
-		sudoku.setSudoku(9, 'I', 0);
-		drawBoard(sudoku.getSudoku());
-		*/
+		 * // Test für Änderungen in setSudoku sudoku.setSudoku(9, 'I', 0);
+		 * drawBoard(sudoku.getSudoku());
+		 */
 	}
 
 	/*
@@ -37,6 +38,7 @@ public class GameMaster {
 	 * des Sudoku-Spiels hinterlegt ist.
 	 * 
 	 * @desc: zeichnet das Sudoku-Spielfeld in der Konsole, Beispiel:
+	 * 
 			   A   B   C   D   E   F   G   H   I
 		     _____________________________________ 
 		    |                                     |

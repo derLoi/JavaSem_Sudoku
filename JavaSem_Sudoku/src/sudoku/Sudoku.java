@@ -67,12 +67,18 @@ public class Sudoku {
 	public void genSudoku() {
 		// neues Ranom Object erstellen
 		Random rnd = new Random();
+		int k;
 		// i := Zeilen
 		for (int i = 0; i <= 8; i++) {
 			// j := Spalten in Zeile i
-			for (int j = 0; j <= 8; j++) {
+			for (int j = 0; j <= 2; j++) {
 				// Zufallszahl von 1 - 9 in 9x9 Matrix arySudoku schreiben
-				arySudoku[i][j] = rnd.nextInt(8) + 1;
+				if ((i+j)<=8){
+					k=i+j;
+				}else{
+					k=i;
+				}
+				arySudoku[i][k] = rnd.nextInt(8)+1;
 			}
 		}
 	}
