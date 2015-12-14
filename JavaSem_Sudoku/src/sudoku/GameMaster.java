@@ -12,7 +12,7 @@ public class GameMaster {
 
 	public static void main(String[] args) {
 		
-		System.out.println("Willkommen bei Sudokufy - von LT");
+		System.out.println("Willkommen bei Sudokufy - von LTML");
 		
 		Sudoku sudoku = new Sudoku();
 		SudokuChecker check = new SudokuChecker();
@@ -68,13 +68,14 @@ public class GameMaster {
                |_____________________________________|
 	 */
 	public static void drawBoard(int[][] arySudoku) {
+		String[] abc = {"A", "B", "C", "D", "E", "F", "G", "H", "I"};
 		// i := Zeilen
 		for (int i = 0; i <= 8; i++) {
 			// erste Zeile Kopfbereich zeichnen
 			if (i == 0) {
 				System.out.println("");
 				// Koordinaten A - I im Kopf
-				System.out.println("       A   B   C   D   E   F   G   H   I");
+				System.out.println("       1   2   3   4   5   6   7   8   9");
 				System.out.println("     _____________________________________ ");
 				System.out.println("    |                                     |");
 			}
@@ -82,7 +83,7 @@ public class GameMaster {
 			for (int j = 0; j <= 8; j++) {
 				// erste Zelle in Zeile i mit Koordinaten 1 - 9
 				if (j == 0) {
-					System.out.print(" " + (i + 1) + "  |  " + arySudoku[i][j] + "  ");
+					System.out.print(" " + abc[i] + "  |  " + arySudoku[i][j] + "  ");
 
 					// Mit +(i+1) lassen wir uns die jeweilige Zeile anzeigen,
 					// um das Spielen zu erleichtern.
