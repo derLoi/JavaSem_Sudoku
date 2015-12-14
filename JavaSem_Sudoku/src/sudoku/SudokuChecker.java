@@ -88,7 +88,8 @@ public class SudokuChecker {
 	 * 
 	 * @changelog: LS - Kommentare hinzugefügt
 	 * 
-	 * @param: Integer Array, dass eine Reihe enthält, die eine Zeile, Spalte oder Box darstellt
+	 * @param: Integer Array, dass eine Reihe enthält, die eine Zeile, Spalte
+	 * oder Box darstellt
 	 * 
 	 * @return: Boolean zeigt an, ob Reihe gültig ist
 	 * 
@@ -102,7 +103,8 @@ public class SudokuChecker {
 			// j := Index für Zahl, mit der verglichen wird
 			for (int j = i + 1; j <= 8; j++) {
 				// Vergleiche row[i] mit jeder Zahl row[j]
-				// kommen gleiche Zahlen vor (ausgenommen 0) ist die Zeile ungültig
+				// kommen gleiche Zahlen vor (ausgenommen 0) ist die Zeile
+				// ungültig
 				if (row[i] == row[j] && row[i] > 0) {
 					// Hilfsvariable bln auf false setzen
 					bln = false;
@@ -111,5 +113,31 @@ public class SudokuChecker {
 		}
 		// Rückgabewert: true (keine Fehler), false (mind. 1 Fehler)
 		return bln;
+	}
+
+	public boolean checkNumInCell(int[][] sudoku, int x, int y, int num) {
+		int[] col = new int[9];
+		int[] row = new int[9];
+		int[] box = new int[9];
+		int temp = 0;
+		for (int i = 0; i <= 8; i++) {
+			row[i] = sudoku[y][i];
+		}
+		for (int i = 0; i <= 8; i++) {
+			col[i] = sudoku[i][x];
+		}
+		int startZ = (y / 3) * 3;
+		int startS = (x / 3) * 3;
+
+		for (int i = startZ; i <= (startZ + 2); i++) {
+			// n := Spalten in Zeile m in Box
+			for (int j = startS; j <= (startS + 2); j++) {
+				// temp Index für Reihen-Array box
+				box[temp] = sudoku[i][j];
+				// temp inkrementieren
+				temp++;
+			}
+		}
+		return checkRow(row) && checkRow(col) && checkRow(box);
 	}
 }

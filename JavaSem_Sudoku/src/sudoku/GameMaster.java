@@ -16,17 +16,35 @@ public class GameMaster {
 		
 		Sudoku sudoku = new Sudoku();
 		SudokuChecker check = new SudokuChecker();
+		SudokuSolver solve = new SudokuSolver();
 
 		sudoku.genSudoku();
 
 		drawBoard(sudoku.getSudoku());
-
+		
+		while (solve.getNextEmptyCell(sudoku.getSudoku())[0] < 9){
+			//Debugging: Ausgabe
+			for (int i = 0; i<=1; i++){
+				System.out.print(solve.getNextEmptyCell(sudoku.getSudoku())[i]);
+			}
+			for (int i = 1; i<= 9; i++){
+				System.out.println(check.checkNumInCell(sudoku.getSudoku(),solve.getNextEmptyCell(sudoku.getSudoku())[1] , solve.getNextEmptyCell(sudoku.getSudoku())[0], i));
+				if(check.checkNumInCell(sudoku.getSudoku(),solve.getNextEmptyCell(sudoku.getSudoku())[1] , solve.getNextEmptyCell(sudoku.getSudoku())[0], i)){
+					sudoku.setSudoku(solve.getNextEmptyCell(sudoku.getSudoku())[0], solve.getNextEmptyCell(sudoku.getSudoku())[1], i);
+					break;
+				}
+			}
+			drawBoard(sudoku.getSudoku());
+		}
+		
+		/*
 		// Test Reihen und Spalten prüfen
 		// Um mehr Zahlen im Sudoku zu generieren, muss das obere Limit für j in der genSudoku-Methode angepasst werden
 		check.checkSudoku(sudoku.getSudoku());
 		for (int i = 0; i <= 8; i++) {
 			System.out.println("Reihe " + (i+1) + ": " + check.getErrInRow()[i] + " | Spalte " + (i+1) + ": " + check.getErrInCol()[i] + " | Box "+ (i+1)+ ": "+ check.getErrInBox()[i]);
 		}
+		*/
 
 		/*
 		 * // Test für Änderungen in setSudoku 

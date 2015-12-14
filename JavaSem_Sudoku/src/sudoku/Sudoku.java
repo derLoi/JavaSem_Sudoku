@@ -46,7 +46,7 @@ public class Sudoku {
 	 * 
 	 * @desc: set-Methode für Position x/y in arySudoku
 	 */
-	public void setSudoku(int y, char c, int value) {
+	public void setSudokuABC(int y, char c, int value) {
 		// Konvertiere Char c in Integer (A = 65 in UTF-16, B = 66, usw.)
 		// y Wert in Array berechnen durch c - 65 (bspw. c = "A" -> y = 65 - 65 = 0)
 		int x = c - 65;
@@ -54,6 +54,9 @@ public class Sudoku {
 		--y;
 		arySudoku[y][x] = value;
 	}
+	public void setSudoku(int y, int x, int value) {
+		arySudoku[y][x] = value;
+	}	
 
 	/*
 	 * @author:LS
@@ -71,7 +74,7 @@ public class Sudoku {
 		// i := Zeilen
 		for (int i = 0; i <= 8; i++) {
 			// j := Spalten in Zeile i
-			for (int j = 0; j <= 2; j++) {
+			for (int j = 0; j <= 0; j++) {
 				// Zufallszahl von 1 - 9 in 9x9 Matrix arySudoku schreiben
 				if ((i+j)<=8){
 					k=i+j;
