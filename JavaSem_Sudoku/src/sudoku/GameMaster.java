@@ -11,6 +11,9 @@ package sudoku;
 public class GameMaster {
 
 	public static void main(String[] args) {
+		
+		System.out.println("Willkommen bei Sudokufy - von LT");
+		
 		Sudoku sudoku = new Sudoku();
 		SudokuChecker check = new SudokuChecker();
 
@@ -26,7 +29,8 @@ public class GameMaster {
 		}
 
 		/*
-		 * // Test für Änderungen in setSudoku sudoku.setSudoku(9, 'I', 0);
+		 * // Test für Änderungen in setSudoku 
+		 * sudoku.setSudoku(9, 'I', 0);
 		 * drawBoard(sudoku.getSudoku());
 		 */
 	}
