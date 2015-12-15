@@ -114,7 +114,19 @@ public class SudokuChecker {
 		// Rückgabewert: true (keine Fehler), false (mind. 1 Fehler)
 		return bln;
 	}
-
+	public boolean checkNum(int[] row, int num) {
+		// Hilfsvariable
+		boolean bln = true;
+		// i := Index für aktuell verglichene Zahl
+		for (int i = 0; i <= 7; i++) {
+			if (row[i] == num){
+				bln = false;
+			}
+		}
+		// Rückgabewert: true (keine Fehler), false (mind. 1 Fehler)
+		return bln;
+	}
+	
 	public boolean checkNumInCell(int[][] sudoku, int x, int y, int num) {
 		int[] col = new int[9];
 		int[] row = new int[9];
@@ -138,6 +150,6 @@ public class SudokuChecker {
 				temp++;
 			}
 		}
-		return checkRow(row) && checkRow(col) && checkRow(box);
+		return checkNum(row, num) && checkNum(col, num) && checkNum(box, num);
 	}
 }

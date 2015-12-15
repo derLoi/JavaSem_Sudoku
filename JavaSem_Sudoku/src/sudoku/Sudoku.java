@@ -48,15 +48,18 @@ public class Sudoku {
 	 */
 	public void setSudokuABC(int y, char c, int value) {
 		// Konvertiere Char c in Integer (A = 65 in UTF-16, B = 66, usw.)
-		// y Wert in Array berechnen durch c - 65 (bspw. c = "A" -> y = 65 - 65 = 0)
+		// y Wert in Array berechnen durch c - 65 (bspw. c = "A" -> y = 65 - 65
+		// = 0)
 		int x = c - 65;
-		// Decrement x (Array-Lowerbound ist 0, eingegebene Koordinaten beginnend bei 1)
+		// Decrement x (Array-Lowerbound ist 0, eingegebene Koordinaten
+		// beginnend bei 1)
 		--y;
 		arySudoku[y][x] = value;
 	}
+
 	public void setSudoku(int y, int x, int value) {
 		arySudoku[y][x] = value;
-	}	
+	}
 
 	/*
 	 * @author:LS
@@ -70,19 +73,19 @@ public class Sudoku {
 	public void genSudoku() {
 		// neues Ranom Object erstellen
 		Random rnd = new Random();
-		int k;
+		int num;
+		boolean bln = true;
 		// i := Zeilen
 		for (int i = 0; i <= 8; i++) {
-			// j := Spalten in Zeile i
-			for (int j = 0; j <= 0; j++) {
-				// Zufallszahl von 1 - 9 in 9x9 Matrix arySudoku schreiben
-				if ((i+j)<=8){
-					k=i+j;
-				}else{
-					k=i;
+			do {
+				num = rnd.nextInt(8) + 1;
+				for (int j = i; j >= 0; j--) {
+					if (num == arySudoku[0][i]) {
+						bln = false;
+					}
 				}
-				arySudoku[i][k] = rnd.nextInt(8)+1;
-			}
+			} while (bln == false);
+			arySudoku[0][i] = num;
 		}
 	}
 }

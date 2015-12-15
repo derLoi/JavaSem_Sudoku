@@ -1,5 +1,6 @@
 package sudoku;
 
+import java.util.Scanner;
 /*
  * @author: LS 
  * @version: 11/12/2015
@@ -14,6 +15,7 @@ public class GameMaster {
 		
 		System.out.println("Willkommen bei Sudokufy - von LTML");
 		
+		Scanner scanner = new Scanner(System.in);		
 		Sudoku sudoku = new Sudoku();
 		SudokuChecker check = new SudokuChecker();
 		SudokuSolver solve = new SudokuSolver();
@@ -28,14 +30,22 @@ public class GameMaster {
 				System.out.print(solve.getNextEmptyCell(sudoku.getSudoku())[i]);
 			}
 			for (int i = 1; i<= 9; i++){
-				System.out.println(check.checkNumInCell(sudoku.getSudoku(),solve.getNextEmptyCell(sudoku.getSudoku())[1] , solve.getNextEmptyCell(sudoku.getSudoku())[0], i));
+				System.out.print(check.checkNumInCell(sudoku.getSudoku(),solve.getNextEmptyCell(sudoku.getSudoku())[1] , solve.getNextEmptyCell(sudoku.getSudoku())[0], i));
+				System.out.println(i);
 				if(check.checkNumInCell(sudoku.getSudoku(),solve.getNextEmptyCell(sudoku.getSudoku())[1] , solve.getNextEmptyCell(sudoku.getSudoku())[0], i)){
 					sudoku.setSudoku(solve.getNextEmptyCell(sudoku.getSudoku())[0], solve.getNextEmptyCell(sudoku.getSudoku())[1], i);
 					break;
 				}
 			}
 			drawBoard(sudoku.getSudoku());
+			System.out.println("Nächste Zahl (0/1)?");
+			if (scanner.nextInt()== 1){
+				System.out.println("ENDE");
+				break;
+			}
 		}
+		
+		scanner.close();
 		
 		/*
 		// Test Reihen und Spalten prüfen
