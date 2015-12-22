@@ -46,14 +46,12 @@ public class Sudoku {
 	 * 
 	 * @desc: set-Methode für Position x/y in arySudoku
 	 */
-	public void setSudokuABC(int y, char c, int value) {
+	public void setSudokuABC(int x, char c, int value) {
 		// Konvertiere Char c in Integer (A = 65 in UTF-16, B = 66, usw.)
-		// y Wert in Array berechnen durch c - 65 (bspw. c = "A" -> y = 65 - 65
-		// = 0)
-		int x = c - 65;
-		// Decrement x (Array-Lowerbound ist 0, eingegebene Koordinaten
-		// beginnend bei 1)
-		--y;
+		// y Wert in Array berechnen durch c - 65 (bspw. c = "A" -> y = 65 - 65 = 0)
+		int y = c - 65;
+		// Decrement x (Array-Lowerbound ist 0, eingegebene Koordinaten beginnend bei 1)
+		--x;
 		arySudoku[y][x] = value;
 	}
 
@@ -74,18 +72,20 @@ public class Sudoku {
 		// neues Ranom Object erstellen
 		Random rnd = new Random();
 		int num;
-		boolean bln = true;
+		boolean bln;
 		// i := Zeilen
 		for (int i = 0; i <= 8; i++) {
 			do {
-				num = rnd.nextInt(8) + 1;
-				for (int j = i; j >= 0; j--) {
-					if (num == arySudoku[0][i]) {
+				num = rnd.nextInt(9) + 1;	// neue Zufallszahl zw. 1 - 9 erzeugen
+				bln = true;					// Fehler-Indikator zurücksetzen
+				for (int j = 0; j <= i; j++) {
+					if (num == arySudoku[0][j]) {
 						bln = false;
+						break;
 					}
 				}
 			} while (bln == false);
 			arySudoku[0][i] = num;
 		}
-	}
+	} 
 }
