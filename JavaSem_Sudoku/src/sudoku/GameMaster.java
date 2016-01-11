@@ -1,5 +1,6 @@
 package sudoku;
 
+import java.util.Random;
 import java.util.Scanner;
 /*
  * @author: LS 
@@ -10,58 +11,58 @@ import java.util.Scanner;
  * @desc: kontrolliert den Spielablauf.
  */
 public class GameMaster {
+	
+	private static Cells[][] sudokuCells = new Cells[9][9];
 
 	public static void main(String[] args) {
-		
+ 
 		System.out.println("Willkommen bei Sudokufy - von LTML");
 		
-		Scanner scanner = new Scanner(System.in);		
-		Sudoku sudoku = new Sudoku();
-		SudokuChecker check = new SudokuChecker();
+		Scanner scanner = new Scanner(System.in);
 		SudokuSolver solve = new SudokuSolver();
-
-		sudoku.genSudoku();
-
-		drawBoard(sudoku.getSudoku());
 		
-		while (solve.getNextEmptyCell(sudoku.getSudoku())[0] < 9){
-			//Debugging: Ausgabe
-			for (int i = 0; i<=1; i++){
-				System.out.print(solve.getNextEmptyCell(sudoku.getSudoku())[i]);
-			}
-			for (int i = 1; i<= 9; i++){
-				System.out.print(check.checkNumInCell(sudoku.getSudoku(),solve.getNextEmptyCell(sudoku.getSudoku())[1] , solve.getNextEmptyCell(sudoku.getSudoku())[0], i));
-				System.out.println(i);
-				if(check.checkNumInCell(sudoku.getSudoku(),solve.getNextEmptyCell(sudoku.getSudoku())[1] , solve.getNextEmptyCell(sudoku.getSudoku())[0], i)){
-					sudoku.setSudoku(solve.getNextEmptyCell(sudoku.getSudoku())[0], solve.getNextEmptyCell(sudoku.getSudoku())[1], i);
-					break;
-				}
-			}
-			drawBoard(sudoku.getSudoku());
-			System.out.println("Nächste Zahl (0/1)?");
-			if (scanner.nextInt()== 1){
-				System.out.println("ENDE");
-				break;
-			}
-		}
+		genSudoku();
+		drawBoard();
 		
-		scanner.close();
+		//sudokuCells = solve.solveSudoku(sudokuCells);
+		solve.solveSudoku(sudokuCells);
+		
+		drawBoard();
 		
 		/*
-		// Test Reihen und Spalten prüfen
-		// Um mehr Zahlen im Sudoku zu generieren, muss das obere Limit für j in der genSudoku-Methode angepasst werden
-		check.checkSudoku(sudoku.getSudoku());
-		for (int i = 0; i <= 8; i++) {
-			System.out.println("Reihe " + (i+1) + ": " + check.getErrInRow()[i] + " | Spalte " + (i+1) + ": " + check.getErrInCol()[i] + " | Box "+ (i+1)+ ": "+ check.getErrInBox()[i]);
-		}
-		*/
-
-		/*
-		 * // Test für Änderungen in setSudoku 
-		 * sudoku.setSudoku(9, 'I', 0);
-		 * drawBoard(sudoku.getSudoku());
+		 * Test: getNextEmptyCell-Methode
+		 * int[] next = solve.getNextEmptyCell(sudokuCells);
+		 * System.out.println("X:" + next[0] + " Y:" + next[1]);		
 		 */
+		}
+	
+	public static void genSudoku(){
+		// initialize Objects
+		for (int i = 0; i <= 8; i++){
+			for (int j = 0; j <= 8; j++){
+				sudokuCells[i][j] = new Cells(j, i, sudokuCells[0][0]);
+			}
+		}
+		// fill first row with values
+		Random rnd = new Random();			// neues Random-Object erstellen
+		int num;
+		boolean bln;
+		// i := Zeilen
+		for (int i = 0; i <= 8; i++) {
+			do {
+				num = rnd.nextInt(9) + 1;	// neue Zufallszahl zw. 1 - 9 erzeugen
+				bln = true;					// Fehler-Indikator zurücksetzen
+				for (int j = 0; j <= i; j++) {
+					if (num == sudokuCells[0][j].getValue()) {
+						bln = false;
+						break;
+					}
+				}
+			} while (bln == false);
+			sudokuCells[0][i].setValue(num);
+		}
 	}
+	
 
 	/*
 	 * @author: TM
@@ -95,7 +96,7 @@ public class GameMaster {
             9  |  4   5   7 | 7   8   3 | 8   5   7  |
                |_____________________________________|
 	 */
-	public static void drawBoard(int[][] arySudoku) {
+	public static void drawBoard() {
 		String[] abc = {"A", "B", "C", "D", "E", "F", "G", "H", "I"};
 		// i := Zeilen
 		for (int i = 0; i <= 8; i++) {
@@ -111,24 +112,24 @@ public class GameMaster {
 			for (int j = 0; j <= 8; j++) {
 				// erste Zelle in Zeile i mit Koordinaten 1 - 9
 				if (j == 0) {
-					System.out.print(" " + abc[i] + "  |  " + arySudoku[i][j] + "  ");
+					System.out.print(" " + abc[i] + "  |  " + sudokuCells[i][j].getValue() + "  ");
 
 					// Mit +(i+1) lassen wir uns die jeweilige Zeile anzeigen,
 					// um das Spielen zu erleichtern.
 					// letzte Zelle in Zeile i mit abschließendem Rahmen &
 					// Zeilenumbruch
 				} else if (j == 8) {
-					System.out.print(" " + arySudoku[i][j] + "  |");
+					System.out.print(" " + sudokuCells[i][j].getValue() + "  |");
 					System.out.println("");
 
 					// Damit die Kästchen klar erkennbar sind, wird
 					// jeweils nach dem 3. und dem 6. Zahlenfeld "!" durch "|"
 					// ersetzt.
 				} else if (j == 2 || j == 5) {
-					System.out.print(" " + arySudoku[i][j] + " |");
+					System.out.print(" " + sudokuCells[i][j].getValue() + " |");
 					// verbleibende Zellen
 				} else {
-					System.out.print(" " + arySudoku[i][j] + "  ");
+					System.out.print(" " + sudokuCells[i][j].getValue() + "  ");
 				}
 			}
 			// letzte Zeile i mit abschließendem Rahmen

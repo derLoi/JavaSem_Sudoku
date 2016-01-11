@@ -15,7 +15,12 @@ public class Sudoku {
 	 * @desc: Lösungsfeld (aktueller Stand) als 2-dimmensionales Integer-Array
 	 */
 	private int[][] arySudoku = new int[9][9];
-
+	private int[][] aryFixSudoku = new int[9][9];	// enthält gegebene Zahlen des Sudokus, die der Spieler nicht verändern kann.
+	
+	public int[][] getFixSudoku(){
+		return aryFixSudoku;
+	}
+	
 	/*
 	 * @author: LS
 	 * 
@@ -68,6 +73,7 @@ public class Sudoku {
 	 * 
 	 * @desc: Generiert beispielhaft 9x9 Matrix mit Zufallszahlen von 1-9
 	 */
+	
 	public void genSudoku() {
 		// neues Ranom Object erstellen
 		Random rnd = new Random();
@@ -86,6 +92,7 @@ public class Sudoku {
 				}
 			} while (bln == false);
 			arySudoku[0][i] = num;
+			aryFixSudoku[0][i] = num;
 		}
 	} 
 }

@@ -1,23 +1,6 @@
 package sudoku;
 
 public class SudokuChecker {
-	// Fehler-Variablen
-	private boolean[] errInRow = new boolean[9];
-	private boolean[] errInCol = new boolean[9];
-	private boolean[] errInBox = new boolean[9];
-
-	// Get-Methoden
-	public boolean[] getErrInRow() {
-		return errInRow;
-	}
-
-	public boolean[] getErrInCol() {
-		return errInCol;
-	}
-
-	public boolean[] getErrInBox() {
-		return errInBox;
-	}
 
 	/*
 	 * @author: LS
@@ -32,7 +15,7 @@ public class SudokuChecker {
 	 * 
 	 * @desc: Überprüft, ob das Sudoku gültig ist
 	 */
-	public void checkSudoku(int[][] sudoku) {
+	public void checkSudoku(Cells[][] sudokuCells) {
 		// Arrays speichern Status der Reihen/Spalten/Boxen
 		int[] row = new int[9]; // Reihen
 		int[] col = new int[9]; // Spalten
@@ -48,13 +31,13 @@ public class SudokuChecker {
 			// j := Spalten
 			for (int j = 0; j <= 8; j++) {
 				// Zeilen 0 - 8 aus Sudoku-Array in row speichern
-				row[j] = sudoku[i][j];
+				row[j] = sudokuCells[i][j].getValue();
 				// Spalten 0 - 8 aus Sudoku-Array in col speichern
-				col[j] = sudoku[j][i];
+				col[j] = sudokuCells[j][i].getValue();
 			}
 			// Überprüfe Gültigkeit der aktuellen Zeile und Spalte
-			errInRow[i] = checkRow(row);
-			errInCol[i] = checkRow(col);
+			// errInRow[i] = checkRow(row);
+			// errInCol[i] = checkRow(col);
 		}
 		/*
 		 * Teil 2: Zerschneide Sudoku-Array in 9 Boxen
@@ -68,13 +51,13 @@ public class SudokuChecker {
 					// n := Spalten in Zeile m in Box
 					for (int n = 0; n <= 2; n++) {
 						// temp Index für Reihen-Array box
-						box[temp] = sudoku[k * 3 + m][l * 3 + n];
+						box[temp] = sudokuCells[k * 3 + m][l * 3 + n].getValue();
 						// temp inkrementieren
 						temp++;
 					}
 				}
 				// Überprüfe Box auf Fehler, speichere Status in errInBox
-				errInBox[3 * k + l] = checkRow(box);
+				// errInBox[3 * k + l] = checkRow(box);
 				// temp zurücksetzen
 				temp = 0;
 			}
@@ -99,9 +82,9 @@ public class SudokuChecker {
 		// Hilfsvariable
 		boolean bln = true;
 		// i := Index für aktuell verglichene Zahl
-		for (int i = 0; i <= 7; i++) {
+		for (int i = 0; i <= (row.length - 2); i++) {
 			// j := Index für Zahl, mit der verglichen wird
-			for (int j = i + 1; j <= 8; j++) {
+			for (int j = i + 1; j <= (row.length - 1); j++) {
 				// Vergleiche row[i] mit jeder Zahl row[j]
 				// kommen gleiche Zahlen vor (ausgenommen 0) ist die Zeile
 				// ungültig
@@ -114,19 +97,20 @@ public class SudokuChecker {
 		// Rückgabewert: true (keine Fehler), false (mind. 1 Fehler)
 		return bln;
 	}
+
 	public boolean checkNum(int[] row, int num) {
 		// Hilfsvariable
 		boolean bln = true;
 		// i := Index für aktuell verglichene Zahl
-		for (int i = 0; i <= 7; i++) {
-			if (row[i] == num){
+		for (int i = 0; i <= (row.length - 1); i++) {
+			if (row[i] == num) {
 				bln = false;
 			}
 		}
 		// Rückgabewert: true (keine Fehler), false (mind. 1 Fehler)
 		return bln;
 	}
-	
+
 	public boolean checkNumInCell(int[][] sudoku, int x, int y, int num) {
 		int[] col = new int[9];
 		int[] row = new int[9];
