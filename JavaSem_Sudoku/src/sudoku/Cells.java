@@ -10,7 +10,7 @@ public class Cells {
 	private Cells nextCell;
 	private int x; // x-Index of cell
 	private int y; // y-Index of cell
-	private boolean fixVal;
+	private boolean fixVal; // value fix -> nicht verändern
 	List<Integer> posVal = new ArrayList<Integer>(); // List of possible Values
 														// (int) for this cell
 	List<Integer> excVal = new ArrayList<Integer>(); // List of excluded Values

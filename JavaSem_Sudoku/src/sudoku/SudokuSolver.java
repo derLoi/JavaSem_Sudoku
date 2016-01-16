@@ -37,7 +37,7 @@ public class SudokuSolver {
 			}
 			stepps++;
 		}
-		System.out.println("step: " + stepps);
+		System.out.println("it took me " + stepps + " iterations to generate this sudoku for you!");
 	}
 
 	public void bckTrckError(Cells[][] sudokuCells, Cells currentCell) {
