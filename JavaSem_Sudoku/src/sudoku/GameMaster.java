@@ -26,8 +26,9 @@ public class GameMaster {
 		// Fill first random numbers
 		fillRndVal();
 		drawBoard();
+
 		// solve given sudoku
-		solve.solveSudoku(sudokuCells, sudokuCells[0][0]);
+		solve.solveSudoku(sudokuCells, firstEmptyCell(sudokuCells[0][0]));
 		drawBoard();
 		}
 
@@ -77,8 +78,16 @@ public class GameMaster {
 	
 	public static void insertFixVal(Cells[][] sudokuCells, int x, int y, int value){
 		sudokuCells[y][x].setValue(value);
+		sudokuCells[y][x].setFixVal(true);
 		sudokuCells[y][x].getLastCell().setNextCell(sudokuCells[y][x].getNextCell());
 		sudokuCells[y][x].getNextCell().setLastCell(sudokuCells[y][x].getLastCell());
+	}
+	
+	public static Cells firstEmptyCell(Cells currentCell){
+		while(currentCell.isFixVal()){
+			currentCell = currentCell.getNextCell();
+		}
+		return currentCell;
 	}
 
 	/*

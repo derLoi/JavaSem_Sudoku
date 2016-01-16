@@ -10,6 +10,7 @@ public class Cells {
 	private Cells nextCell;
 	private int x; // x-Index of cell
 	private int y; // y-Index of cell
+	private boolean fixVal;
 	List<Integer> posVal = new ArrayList<Integer>(); // List of possible Values
 														// (int) for this cell
 	List<Integer> excVal = new ArrayList<Integer>(); // List of excluded Values
@@ -57,6 +58,14 @@ public class Cells {
 		this.y = y;
 	}
 
+	public boolean isFixVal() {
+		return fixVal;
+	}
+
+	public void setFixVal(boolean fixVal) {
+		this.fixVal = fixVal;
+	}
+
 	// constructor
 	public Cells(int x, int y) {
 		this.x = x;
@@ -64,6 +73,7 @@ public class Cells {
 		this.value = 0;
 		this.lastCell = null;
 		this.nextCell = null;
+		this.fixVal = false;
 	}
 
 	public void pickValueFromList() {
@@ -72,7 +82,7 @@ public class Cells {
 			value = 0;
 		} else {
 			value = posVal.get(rnd.nextInt(posVal.size()));
-			this.posVal.remove((int) value);
+			posVal.remove(posVal.indexOf(value));
 		}
 	}
 
@@ -88,6 +98,9 @@ public class Cells {
 	}
 
 	public void remValFromPosVals(int remVal) {
-		this.posVal.remove(this.posVal.indexOf(remVal));
+		// System.out.println("posVal: "+this.posVal.toString());
+		this.excVal.add(remVal);
+		// System.out.println("excVal: "+this.excVal.toString());
+		this.value = 0;
 	}
 }

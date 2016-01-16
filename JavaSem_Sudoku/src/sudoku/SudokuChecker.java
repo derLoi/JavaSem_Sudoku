@@ -16,6 +16,7 @@ public class SudokuChecker {
 	 * @desc: Überprüft, ob das Sudoku gültig ist
 	 */
 	public void findPosVals(Cells[][] sudokuCells, Cells currentCell) {
+		if (!currentCell.posVal.isEmpty()) currentCell.posVal.clear();
 		for (int i = 1; i <= 9; i++) {
 			if (valIsAllowed(sudokuCells, currentCell, i)) {
 				currentCell.posVal.add(i);
