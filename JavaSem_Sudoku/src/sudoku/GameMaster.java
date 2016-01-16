@@ -12,7 +12,7 @@ import java.util.Random;
  * @desc: kontrolliert den Spielablauf.
  */
 public class GameMaster {
-
+// Test 
 	private static Cells[][] sudokuCells = new Cells[9][9];
 
 	public static void main(String[] args) {
