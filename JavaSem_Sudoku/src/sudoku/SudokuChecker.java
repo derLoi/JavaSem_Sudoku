@@ -1,5 +1,7 @@
 package sudoku;
 
+import java.util.Arrays;
+
 public class SudokuChecker {
 
 	/*
@@ -16,7 +18,8 @@ public class SudokuChecker {
 	 * @desc: Überprüft, ob das Sudoku gültig ist
 	 */
 	public void findPosVals(Cells[][] sudokuCells, Cells currentCell) {
-		if (!currentCell.posVal.isEmpty()) currentCell.posVal.clear();
+		if (!currentCell.posVal.isEmpty())
+			currentCell.posVal.clear();
 		for (int i = 1; i <= 9; i++) {
 			if (valIsAllowed(sudokuCells, currentCell, i)) {
 				currentCell.posVal.add(i);
@@ -66,7 +69,7 @@ public class SudokuChecker {
 		// excVals = currentCell.listToArray(currentCell.excVal);
 		return checkNum(getCurrentRow(sudokuCells, currentCell.getY()), value)
 				&& checkNum(getCurrentCol(sudokuCells, currentCell.getX()), value)
-				&& checkNum(getCurrentBox(sudokuCells, currentCell.getX(), currentCell.getY()), value) 
+				&& checkNum(getCurrentBox(sudokuCells, currentCell.getX(), currentCell.getY()), value)
 				&& checkNum(currentCell.listToArray(currentCell.excVal), value);
 	}
 
@@ -82,33 +85,33 @@ public class SudokuChecker {
 		// Rückgabewert: true (keine Fehler), false (mind. 1 Fehler)
 		return bln;
 	}
-	
+
 	public boolean checkNum(int[] row) {
 		// Hilfsvariable
-		boolean bln = true;
-		// i := Index für aktuell verglichene Zahl
-		for (int i = 0; i < row.length; i++) {
-			for (int j = 1; j <= 9; j++){
-				if (row[i] == j || row[i] == 0) {
-					bln = false;
-				}
+		int[] test = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+		// sort
+		Arrays.sort(row);
+		
+		for (int i = 0; i < 8; i++){
+			if(row[i] != test[i] || row[i] == 0){
+				return false;
 			}
 		}
-		// Rückgabewert: true (keine Fehler), false (mind. 1 Fehler)
-		return bln;
+		return true;
 	}
-	
-	public boolean sudokuIsSolved(Cells[][] sudokuCells){
+
+	public boolean sudokuIsSolved(Cells[][] sudokuCells) {
 		boolean bln = true;
-		for (int i = 0; i <= 8; i++){
+		for (int i = 0; i <= 8; i++) {
 			bln = bln && checkNum(getCurrentRow(sudokuCells, i));
 			bln = bln && checkNum(getCurrentCol(sudokuCells, i));
 		}
-		for (int i = 0; i <= 6; i += 3){
-			for (int j = 0; j <= 6; j += 3){
+		for (int i = 0; i <= 6; i = i + 3) {
+			for (int j = 0; j <= 6; j = j + 3) {
 				bln = bln && checkNum(getCurrentBox(sudokuCells, j, i));
 			}
 		}
 		return bln;
 	}
+	
 }
