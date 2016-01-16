@@ -1,12 +1,12 @@
 package sudoku;
 
 import java.util.Random;
-
-// import java.util.Scanner;
+import java.util.Scanner;
 /*
  * @author: LS 
  * @version: 11/12/2015
  * @changelog:
+ * 		MW: Abfrage der Schwierigkeitsstufe eingebaut
  * 		TM: Überarbeitetungen der Spielfeldanzeige
  * 		LS: Test mit Gültigkeitsprüfung für zufällig generiertes Sudoku. Ausgabe Ergebnisse
  * @desc: kontrolliert den Spielablauf.
@@ -19,7 +19,35 @@ public class GameMaster {
 
 		System.out.println("Willkommen bei Sudokufy - von LTML");
 
-		// Scanner scanner = new Scanner(System.in);
+		System.out.println();
+		
+		//Wahl der Schwierigkeitsstufe
+		System.out.println("Wähle deine Schwierigkeitsstufe: Sehr leicht, leicht, mittel, schwer, schwer des todes");
+		
+		Scanner scanner = null;
+		try {
+		    scanner = new Scanner(System.in);
+		    
+		    String eingabe = scanner.nextLine();
+		
+			if (eingabe.equalsIgnoreCase("Sehr leicht")){
+				System.out.println("sehr leicht");
+			}else if (eingabe.equalsIgnoreCase("leicht")){
+				System.out.println("leicht");
+			}else if (eingabe.equalsIgnoreCase("mittel")){
+				System.out.println("mittel");
+			}else if (eingabe.equalsIgnoreCase("schwer")){
+				System.out.println("schwer");
+			}else if (eingabe.equalsIgnoreCase("schwer des todes")){
+				System.out.println("schwer des todes");
+			}
+		System.out.println("Ok..dann los!");
+		}
+		finally {
+		    if(scanner!=null)
+		        scanner.close();
+		}
+
 		SudokuSolver solve = new SudokuSolver();
 		// generate objects in array
 		genSudoku();
