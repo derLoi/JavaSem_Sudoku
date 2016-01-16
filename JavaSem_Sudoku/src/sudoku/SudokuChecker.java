@@ -15,87 +15,58 @@ public class SudokuChecker {
 	 * 
 	 * @desc: Überprüft, ob das Sudoku gültig ist
 	 */
-	public void checkSudoku(Cells[][] sudokuCells) {
-		// Arrays speichern Status der Reihen/Spalten/Boxen
-		int[] row = new int[9]; // Reihen
-		int[] col = new int[9]; // Spalten
-		int[] box = new int[9]; // Boxen
-		int temp = 0; // Hilfsvariable
-		/*
-		 * Teil 1: Zerschneide Sudoku-Array in 9 Reihen und 9 Spalten, prüfe
-		 * Reihen/Spalten auf Gültigkeit, speichere Status (true/false)
-		 * Gültigkeit ab
-		 */
-		// i := Zeilen
-		for (int i = 0; i <= 8; i++) {
-			// j := Spalten
-			for (int j = 0; j <= 8; j++) {
-				// Zeilen 0 - 8 aus Sudoku-Array in row speichern
-				row[j] = sudokuCells[i][j].getValue();
-				// Spalten 0 - 8 aus Sudoku-Array in col speichern
-				col[j] = sudokuCells[j][i].getValue();
-			}
-			// Überprüfe Gültigkeit der aktuellen Zeile und Spalte
-			// errInRow[i] = checkRow(row);
-			// errInCol[i] = checkRow(col);
-		}
-		/*
-		 * Teil 2: Zerschneide Sudoku-Array in 9 Boxen
-		 */
-		// k := Reihen aus Boxen {1, 2, 3}, {4, 5, 6}, {7, 8, 9}
-		for (int k = 0; k <= 2; k++) {
-			// l := Boxen in Reihen k
-			for (int l = 0; l <= 2; l++) {
-				// m := Zeilen in Box
-				for (int m = 0; m <= 2; m++) {
-					// n := Spalten in Zeile m in Box
-					for (int n = 0; n <= 2; n++) {
-						// temp Index für Reihen-Array box
-						box[temp] = sudokuCells[k * 3 + m][l * 3 + n].getValue();
-						// temp inkrementieren
-						temp++;
-					}
-				}
-				// Überprüfe Box auf Fehler, speichere Status in errInBox
-				// errInBox[3 * k + l] = checkRow(box);
-				// temp zurücksetzen
-				temp = 0;
+	public void findPosVals(Cells[][] sudokuCells, Cells currentCell) {
+		for (int i = 1; i <= 9; i++) {
+			if (valIsAllowed(sudokuCells, currentCell, i)) {
+				currentCell.posVal.add(i);
+				// System.out.println("added " + i + " to List of posVal");
 			}
 		}
 	}
 
-	/*
-	 * @author: LS
-	 * 
-	 * @version: 11/12/2015
-	 * 
-	 * @changelog: LS - Kommentare hinzugefügt
-	 * 
-	 * @param: Integer Array, dass eine Reihe enthält, die eine Zeile, Spalte
-	 * oder Box darstellt
-	 * 
-	 * @return: Boolean zeigt an, ob Reihe gültig ist
-	 * 
-	 * @desc: Überprüft, ob das Sudoku gültig ist
-	 */
-	public boolean checkRow(int[] row) {
-		// Hilfsvariable
-		boolean bln = true;
-		// i := Index für aktuell verglichene Zahl
-		for (int i = 0; i <= (row.length - 2); i++) {
-			// j := Index für Zahl, mit der verglichen wird
-			for (int j = i + 1; j <= (row.length - 1); j++) {
-				// Vergleiche row[i] mit jeder Zahl row[j]
-				// kommen gleiche Zahlen vor (ausgenommen 0) ist die Zeile
-				// ungültig
-				if (row[i] == row[j] && row[i] > 0) {
-					// Hilfsvariable bln auf false setzen
-					bln = false;
-				}
+	public int[] getCurrentRow(Cells[][] sudokuCells, int y) {
+		int[] row = new int[9];
+		// i := Spalten
+		for (int i = 0; i <= 8; i++) {
+			// Zeilen 0 - 8 aus Sudoku-Array in row speichern
+			row[i] = sudokuCells[y][i].getValue();
+		}
+		return row;
+	}
+
+	public int[] getCurrentCol(Cells[][] sudokuCells, int x) {
+		int[] col = new int[9];
+		// i := Zeilen
+		for (int i = 0; i <= 8; i++) {
+			// Zeilen 0 - 8 aus Sudoku-Array in row speichern
+			col[i] = sudokuCells[i][x].getValue();
+		}
+		return col;
+	}
+
+	public int[] getCurrentBox(Cells[][] sudokuCells, int x, int y) {
+		int temp = 0;
+		int[] box = new int[9];
+		int startZ = (y / 3) * 3;
+		int startS = (x / 3) * 3;
+		for (int i = startZ; i <= (startZ + 2); i++) {
+			// n := Spalten in Zeile m in Box
+			for (int j = startS; j <= (startS + 2); j++) {
+				// temp Index für Reihen-Array box
+				box[temp] = sudokuCells[i][j].getValue();
+				// temp inkrementieren
+				temp++;
 			}
 		}
-		// Rückgabewert: true (keine Fehler), false (mind. 1 Fehler)
-		return bln;
+		return box;
+	}
+
+	public Boolean valIsAllowed(Cells[][] sudokuCells, Cells currentCell, int value) {
+		// excVals = currentCell.listToArray(currentCell.excVal);
+		return checkNum(getCurrentRow(sudokuCells, currentCell.getY()), value)
+				&& checkNum(getCurrentCol(sudokuCells, currentCell.getX()), value)
+				&& checkNum(getCurrentBox(sudokuCells, currentCell.getX(), currentCell.getY()), value) 
+				&& checkNum(currentCell.listToArray(currentCell.excVal), value);
 	}
 
 	public boolean checkNum(int[] row, int num) {
@@ -110,30 +81,33 @@ public class SudokuChecker {
 		// Rückgabewert: true (keine Fehler), false (mind. 1 Fehler)
 		return bln;
 	}
-
-	public boolean checkNumInCell(int[][] sudoku, int x, int y, int num) {
-		int[] col = new int[9];
-		int[] row = new int[9];
-		int[] box = new int[9];
-		int temp = 0;
-		for (int i = 0; i <= 8; i++) {
-			row[i] = sudoku[y][i];
-		}
-		for (int i = 0; i <= 8; i++) {
-			col[i] = sudoku[i][x];
-		}
-		int startZ = (y / 3) * 3;
-		int startS = (x / 3) * 3;
-
-		for (int i = startZ; i <= (startZ + 2); i++) {
-			// n := Spalten in Zeile m in Box
-			for (int j = startS; j <= (startS + 2); j++) {
-				// temp Index für Reihen-Array box
-				box[temp] = sudoku[i][j];
-				// temp inkrementieren
-				temp++;
+	
+	public boolean checkNum(int[] row) {
+		// Hilfsvariable
+		boolean bln = true;
+		// i := Index für aktuell verglichene Zahl
+		for (int i = 0; i < row.length; i++) {
+			for (int j = 1; j <= 9; j++){
+				if (row[i] == j || row[i] == 0) {
+					bln = false;
+				}
 			}
 		}
-		return checkNum(row, num) && checkNum(col, num) && checkNum(box, num);
+		// Rückgabewert: true (keine Fehler), false (mind. 1 Fehler)
+		return bln;
+	}
+	
+	public boolean sudokuIsSolved(Cells[][] sudokuCells){
+		boolean bln = true;
+		for (int i = 0; i <= 8; i++){
+			bln = bln && checkNum(getCurrentRow(sudokuCells, i));
+			bln = bln && checkNum(getCurrentCol(sudokuCells, i));
+		}
+		for (int i = 0; i <= 6; i += 3){
+			for (int j = 0; j <= 6; j += 3){
+				bln = bln && checkNum(getCurrentBox(sudokuCells, j, i));
+			}
+		}
+		return bln;
 	}
 }

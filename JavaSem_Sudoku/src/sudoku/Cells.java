@@ -58,37 +58,36 @@ public class Cells {
 	}
 
 	// constructor
-	public Cells(int x, int y, Cells lastCell) {
+	public Cells(int x, int y) {
 		this.x = x;
 		this.y = y;
-		this.lastCell = lastCell;
 		this.value = 0;
+		this.lastCell = null;
+		this.nextCell = null;
 	}
 
 	public void pickValueFromList() {
 		Random rnd = new Random();
-		int temp = -1;
 		if (posVal.isEmpty()) {
 			value = 0;
 		} else {
 			value = posVal.get(rnd.nextInt(posVal.size()));
-			if (posVal.get(0) != value) {
-				temp = posVal.get(0);
-				posVal.set(0, value);
-				posVal.add(temp);
-			}
-			// System.out.println("Value picked: "+value+" Value moved: "+temp);
+			this.posVal.remove((int) value);
 		}
 	}
 
-	public int[] listToArray(List<Integer> list){
+	public int[] listToArray(List<Integer> list) {
 		int[] ary = new int[list.size()];
-		if (list.size() == 0){
+		if (list.size() == 0) {
 			return ary;
 		}
-		for (int i = 0; i <= (list.size() -1); i++){
+		for (int i = 0; i <= (list.size() - 1); i++) {
 			ary[i] = list.get(i);
 		}
 		return ary;
+	}
+
+	public void remValFromPosVals(int remVal) {
+		this.posVal.remove(this.posVal.indexOf(remVal));
 	}
 }

@@ -1,7 +1,8 @@
 package sudoku;
 
 import java.util.Random;
-import java.util.Scanner;
+
+// import java.util.Scanner;
 /*
  * @author: LS 
  * @version: 11/12/2015
@@ -11,47 +12,58 @@ import java.util.Scanner;
  * @desc: kontrolliert den Spielablauf.
  */
 public class GameMaster {
-	
+
 	private static Cells[][] sudokuCells = new Cells[9][9];
 
 	public static void main(String[] args) {
- 
+
 		System.out.println("Willkommen bei Sudokufy - von LTML");
-		
-		Scanner scanner = new Scanner(System.in);
+
+		// Scanner scanner = new Scanner(System.in);
 		SudokuSolver solve = new SudokuSolver();
-		
+		// generate objects in array
 		genSudoku();
+		// Fill first random numbers
+		fillRndVal();
 		drawBoard();
-		
-		//sudokuCells = solve.solveSudoku(sudokuCells);
-		solve.solveSudoku(sudokuCells);
-		
+		// solve given sudoku
+		solve.solveSudoku(sudokuCells, sudokuCells[0][0]);
 		drawBoard();
-		
-		/*
-		 * Test: getNextEmptyCell-Methode
-		 * int[] next = solve.getNextEmptyCell(sudokuCells);
-		 * System.out.println("X:" + next[0] + " Y:" + next[1]);		
-		 */
 		}
-	
-	public static void genSudoku(){
-		// initialize Objects
-		for (int i = 0; i <= 8; i++){
-			for (int j = 0; j <= 8; j++){
-				sudokuCells[i][j] = new Cells(j, i, sudokuCells[0][0]);
+
+	public static void genSudoku() {
+		// initialize Objects in array
+		Cells currentCell = null;
+		Cells lastCell = null;
+		for (int i = 0; i <= 8; i++) {
+			for (int j = 0; j <= 8; j++) {
+				sudokuCells[i][j] = new Cells(j, i);
 			}
 		}
-		// fill first row with values
-		Random rnd = new Random();			// neues Random-Object erstellen
+		// set first last cell
+		lastCell = sudokuCells[8][8];
+		// link objects as double linked list
+		for (int i = 0; i <= 8; i++) {
+			for (int j = 0; j <= 8; j++) {
+				currentCell = sudokuCells[i][j];
+				currentCell.setLastCell(lastCell);
+				lastCell.setNextCell(currentCell);
+				lastCell = currentCell;			
+			}
+		}
+		// correctly link last cell
+		sudokuCells[8][8].setNextCell(sudokuCells[0][0]);
+	}
+	public static void fillRndVal(){
+	// fill first row with values
+		Random rnd = new Random(); // neues Random-Object erstellen
 		int num;
 		boolean bln;
 		// i := Zeilen
 		for (int i = 0; i <= 8; i++) {
 			do {
-				num = rnd.nextInt(9) + 1;	// neue Zufallszahl zw. 1 - 9 erzeugen
-				bln = true;					// Fehler-Indikator zurücksetzen
+				num = rnd.nextInt(9) + 1; // neue Zufallszahl zw. 1 - 9 erzeugen
+				bln = true; // Fehler-Indikator zurücksetzen
 				for (int j = 0; j <= i; j++) {
 					if (num == sudokuCells[0][j].getValue()) {
 						bln = false;
@@ -59,10 +71,15 @@ public class GameMaster {
 					}
 				}
 			} while (bln == false);
-			sudokuCells[0][i].setValue(num);
+			insertFixVal(sudokuCells, i, 0, num);
 		}
 	}
 	
+	public static void insertFixVal(Cells[][] sudokuCells, int x, int y, int value){
+		sudokuCells[y][x].setValue(value);
+		sudokuCells[y][x].getLastCell().setNextCell(sudokuCells[y][x].getNextCell());
+		sudokuCells[y][x].getNextCell().setLastCell(sudokuCells[y][x].getLastCell());
+	}
 
 	/*
 	 * @author: TM
@@ -73,31 +90,9 @@ public class GameMaster {
 	 * des Sudoku-Spiels hinterlegt ist.
 	 * 
 	 * @desc: zeichnet das Sudoku-Spielfeld in der Konsole, Beispiel:
-	 * 
-                  A   B   C   D   E   F   G   H   I
-                _____________________________________ 
-               |                                     |
-            1  |  4   5   4 | 2   4   3 | 6   7   1  |
-               |            |           |            |
-            2  |  5   6   8 | 2   4   8 | 4   5   2  |
-               |            |           |            |
-            3  |  5   7   8 | 4   2   6 | 8   5   7  |
-               | -----------+-----------+----------- |
-            4  |  4   6   1 | 3   8   1 | 8   6   3  |
-               |            |           |            |
-            5  |  7   8   5 | 8   8   2 | 3   5   3  |
-               |            |           |            |
-            6  |  1   7   5 | 3   6   8 | 5   7   7  |
-               | -----------+-----------+----------- |
-            7  |  3   6   3 | 3   3   5 | 4   8   5  |
-               |            |           |            |
-            8  |  2   1   4 | 4   8   6 | 8   4   8  |
-               |            |           |            |
-            9  |  4   5   7 | 7   8   3 | 8   5   7  |
-               |_____________________________________|
 	 */
 	public static void drawBoard() {
-		String[] abc = {"A", "B", "C", "D", "E", "F", "G", "H", "I"};
+		String[] abc = { "A", "B", "C", "D", "E", "F", "G", "H", "I" };
 		// i := Zeilen
 		for (int i = 0; i <= 8; i++) {
 			// erste Zeile Kopfbereich zeichnen
