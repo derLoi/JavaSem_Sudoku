@@ -4,30 +4,6 @@ import java.util.Arrays;
 
 public class SudokuChecker {
 
-	/*
-	 * @author: LS
-	 * 
-	 * @version: 11/12/2015
-	 * 
-	 * @changelog: LS - Überprüfung für 3x3-Boxen hinzugefügt
-	 * 
-	 * @param: 2-dim Integer Array, dass den aktuellen Spielstand enthält
-	 * 
-	 * @return: Boolean zeigt an, ob Sudoku gültig ist
-	 * 
-	 * @desc: Überprüft, ob das Sudoku gültig ist
-	 */
-	public void findPosVals(Cells[][] sudokuCells, Cells currentCell) {
-		if (!currentCell.posVal.isEmpty())
-			currentCell.posVal.clear();
-		for (int i = 1; i <= 9; i++) {
-			if (valIsAllowed(sudokuCells, currentCell, i)) {
-				currentCell.posVal.add(i);
-				// System.out.println("added " + i + " to List of posVal");
-			}
-		}
-	}
-
 	public int[] getCurrentRow(Cells[][] sudokuCells, int y) {
 		int[] row = new int[9];
 		// i := Spalten
@@ -51,10 +27,12 @@ public class SudokuChecker {
 	public int[] getCurrentBox(Cells[][] sudokuCells, int x, int y) {
 		int temp = 0;
 		int[] box = new int[9];
-		int startZ = (y / 3) * 3;
-		int startS = (x / 3) * 3;
+		// Startkoordinaten der Box ermitteln
+		int startZ = (y / 3) * 3; // Start Zeile
+		int startS = (x / 3) * 3; // Start Spalte
+		// i:= Zeilen der Box
 		for (int i = startZ; i <= (startZ + 2); i++) {
-			// n := Spalten in Zeile m in Box
+			// j:= Spalten der Box
 			for (int j = startS; j <= (startS + 2); j++) {
 				// temp Index für Reihen-Array box
 				box[temp] = sudokuCells[i][j].getValue();
@@ -72,7 +50,17 @@ public class SudokuChecker {
 				&& checkNum(getCurrentBox(sudokuCells, currentCell.getX(), currentCell.getY()), value)
 				&& checkNum(currentCell.listToArray(currentCell.excVal), value);
 	}
-
+	
+	public void findPosVals(Cells[][] sudokuCells, Cells currentCell) {
+		if (!currentCell.posVal.isEmpty())
+			currentCell.posVal.clear();
+		for (int i = 1; i <= 9; i++) {
+			if (valIsAllowed(sudokuCells, currentCell, i)) {
+				currentCell.posVal.add(i);
+			}
+		}
+	}
+	// Polimorphie (engl. polymorphism)
 	public boolean checkNum(int[] row, int num) {
 		// Hilfsvariable
 		boolean bln = true;
@@ -88,12 +76,12 @@ public class SudokuChecker {
 
 	public boolean checkNum(int[] row) {
 		// Hilfsvariable
-		int[] test = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+		int[] temp = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 		// sort
 		Arrays.sort(row);
 		
 		for (int i = 0; i < 8; i++){
-			if(row[i] != test[i] || row[i] == 0){
+			if(row[i] != temp[i] || row[i] == 0){
 				return false;
 			}
 		}

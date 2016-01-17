@@ -84,7 +84,9 @@ public class Cells {
 		this.nextCell = null;
 		this.fixVal = false;
 	}
-
+	/**
+	 * 
+	 */
 	public void pickValueFromList() {
 		Random rnd = new Random();
 		if (posVal.isEmpty()) {
@@ -94,7 +96,11 @@ public class Cells {
 			posVal.remove(posVal.indexOf(value));
 		}
 	}
-
+	/**
+	 * 
+	 * @param list
+	 * @return
+	 */
 	public int[] listToArray(List<Integer> list) {
 		int[] ary = new int[list.size()];
 		if (list.size() == 0) {
@@ -105,11 +111,12 @@ public class Cells {
 		}
 		return ary;
 	}
-
-	public void remValFromPosVals(int remVal) {
-		// System.out.println("posVal: "+this.posVal.toString());
+	/**
+	 * 
+	 * @param remVal
+	 */
+	public void addValueToExcVals(int remVal) {
 		this.excVal.add(remVal);
-		// System.out.println("excVal: "+this.excVal.toString());
 		this.value = 0;
 	}
 }

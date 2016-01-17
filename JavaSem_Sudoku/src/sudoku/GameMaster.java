@@ -13,22 +13,14 @@ import java.util.Scanner;
  * @desc: kontrolliert den Spielablauf.
  */
 
-/*
- * #author: LS
- * #version: 15/12/2015
- * #changelog:
- * #param: 
- * #return:
- * #desc: 
- */
 public class GameMaster {
 	// Array, in dem alle Zellen-Objects des Sudokus gespeichert werden
 	private static Cells[][] sudokuCells = new Cells[9][9];
 
 	public static void main(String[] args) {
-		
+
 		hauptmenu();
-		
+
 		SudokuSolver solve = new SudokuSolver();
 		// generate objects in array
 		genSudoku();
@@ -41,96 +33,83 @@ public class GameMaster {
 		drawBoard();
 	}
 
-	/*
-	 * #author: TM #version: 17/01/2015 #changelog: #param: #return: #desc:
-	 */
 	public static void hauptmenu() {
-			int inpInt;
-			String inpString;
-			System.out.println("Willkommen bei Sudokufy - von LTML");
+		int inpInt;
+		String inpString;
+		System.out.println("Willkommen bei Sudokufy - von LTML");
 
-			System.out.println();
+		System.out.println();
 
-			// Hauptmenü
-			
-			System.out.println("Bitte wähle eine der folgenden Optionen indem du die entsprechende Zahl eingibst:");
-			System.out.println("1. Sudoku spielen \n" + "2. Sudoku lösen lassen \n" + "3. Wie spielt man Sudoku? \n"
-					+ "4. Sudokufy beenden");
+		// Hauptmenü
 
-			Scanner scanner = new Scanner(System.in);
+		System.out.println("Bitte wähle eine der folgenden Optionen indem du die entsprechende Zahl eingibst:");
+		System.out.println("1. Sudoku spielen \n" + "2. Sudoku lösen lassen \n" + "3. Wie spielt man Sudoku? \n"
+				+ "4. Sudokufy beenden");
 
-			inpInt = scanner.nextInt(); // nextInt() bewirkt keinen
-										// Zeilenumbruch, sodass der Scanner
-										// immer noch in derselben Zeile bleibt.
-										// Deswegen nextLine(), um input
-										// skipping zu verhindern
+		Scanner scanner = new Scanner(System.in);
+
+		inpInt = scanner.nextInt(); // nextInt() bewirkt keinen
+									// Zeilenumbruch, sodass der Scanner
+									// immer noch in derselben Zeile bleibt.
+									// Deswegen nextLine(), um input
+									// skipping zu verhindern
+		inpString = scanner.nextLine();
+
+		switch (inpInt) {
+		case 1:
+			System.out.println("Alles klar, ein neues Spiel! \n \n"
+					+ "Bitte wähle deine Schwierigkeitsstufe: Sehr leicht, leicht, mittel, schwer, schwer des todes");
+
 			inpString = scanner.nextLine();
 
-			switch (inpInt) {
-				case 1:
-					System.out.println("Alles klar, ein neues Spiel! \n \n"
-							+ "Bitte wähle deine Schwierigkeitsstufe: Sehr leicht, leicht, mittel, schwer, schwer des todes");
-	
-					inpString = scanner.nextLine();
-	
-					if (inpString.equalsIgnoreCase("Sehr leicht")) {
-						System.out.println("sehr leicht");
-					} else if (inpString.equalsIgnoreCase("leicht")) {
-						System.out.println("leicht");
-					} else if (inpString.equalsIgnoreCase("mittel")) {
-						System.out.println("mittel");
-					} else if (inpString.equalsIgnoreCase("schwer")) {
-						System.out.println("schwer");
-					} else if (inpString.equalsIgnoreCase("schwer des todes")) {
-						System.out.println("schwer des todes");
-					}
-					break;
-				case 2:
-					System.out.println("Hallo, wir sind die Cantina Band. Wenn ihr Songwünsche habt, ruft sie einfach!");
-					// TODO: Methodenaufruf Eingabe eigenes Sudoku
-					break;
-				case 3:
-					/* Auslagern in eigene Methode: 
-					System.out.println("Erklärung des Spiels und des Hauptmenüs: \n \n");
-	
-					System.out.println("Indem du 0 eingibst, kehrst du ins Hauptmenü zurück, mit 4 beendest du Sudokufy");
-	
-					inpInt = scanner.nextInt();
-					inpString = scanner.nextLine();
-	
-					switch (inpInt) {
-						case 0:
-							break;
-						case 4:
-							exit();
-							break;
-						}
-					*/
-					break;
-				case 4:
-					exit();
-					break;
-				default:
-					System.out.println("Ungültige Eingabe.");
-					break;
+			if (inpString.equalsIgnoreCase("Sehr leicht")) {
+				System.out.println("Ausgewählt: sehr leicht");
+			} else if (inpString.equalsIgnoreCase("leicht")) {
+				System.out.println("leicht");
+			} else if (inpString.equalsIgnoreCase("mittel")) {
+				System.out.println("mittel");
+			} else if (inpString.equalsIgnoreCase("schwer")) {
+				System.out.println("schwer");
+			} else if (inpString.equalsIgnoreCase("schwer des todes")) {
+				System.out.println("schwer des todes");
 			}
+			break;
+		case 2:
+			System.out.println("Hallo, wir sind die Cantina Band. Wenn ihr Songwünsche habt, ruft sie einfach!");
+			// TODO: Methodenaufruf Eingabe eigenes Sudoku
+			break;
+		case 3:
+			/*
+			 * Auslagern in eigene Methode: System.out.println(
+			 * "Erklärung des Spiels und des Hauptmenüs: \n \n");
+			 * 
+			 * System.out.println(
+			 * "Indem du 0 eingibst, kehrst du ins Hauptmenü zurück, mit 4 beendest du Sudokufy"
+			 * );
+			 * 
+			 * inpInt = scanner.nextInt(); inpString = scanner.nextLine();
+			 * 
+			 * switch (inpInt) { case 0: break; case 4: exit(); break; }
+			 */
+			break;
+		case 4:
+			exit();
+			break;
+		default:
+			System.out.println("Ungültige Eingabe.");
+			break;
+		}
 		System.out.println("Ok..dann los!");
 	}
 
-	/*
-	 * @author: LS
-	 * 
-	 * @version: 15/12/2015
-	 * 
-	 * @changelog: LS: Zufallswerte finden in eigene Methode ausgelagert
-	 * 
-	 * @desc: Initialisiert für jede Zelle des Arrays sudokuCells ein Object der
-	 * Cells Class
-	 */
+/**
+ * 
+ */
 	public static void genSudoku() {
-		// initialize Objects in array
+		// Hilfsvariablen
 		Cells currentCell = null;
 		Cells lastCell = null;
+
 		for (int i = 0; i <= 8; i++) {
 			for (int j = 0; j <= 8; j++) {
 				sudokuCells[i][j] = new Cells(j, i);
@@ -255,8 +234,10 @@ public class GameMaster {
 					 */
 					System.out.print(" " + abc[i] + "  |  " + sudokuCells[i][j].getValue() + "  ");
 				} else if (j == 8) {
-					// letzte Zelle in aktueller Zeile mit abschließendem
-					// Verkettungszeichen
+					/*
+					 * letzte Zelle in aktueller Zeile mit abschließendem
+					 * Verkettungszeichen
+					 */
 					System.out.print(" " + sudokuCells[i][j].getValue() + "  |");
 					// Zeilenumbruch
 					System.out.println("");
@@ -290,14 +271,15 @@ public class GameMaster {
 			 * Werten, eine leere Zeile als Abstandhalter eingefügt. Die
 			 * Verkettungszeichen stellen die 3x3-Boxen dar.
 			 */
-			if (i < 8 & i != 2 & i != 5) {
+			if (i < 8 && i != 2 && i != 5) {
 				System.out.println("    |            |           |            |");
 			}
 		}
 	}
-
-	private static void exit() { // wann immer das Spiel beendet werden soll,
-									// reicht jetzt exit();
+	/**
+	 * wann immer das Spiel beendet werden soll, reicht jetzt exit();
+	 */
+	private static void exit() {
 		System.out.println("Tschüüü");
 		System.exit(1);
 	}
