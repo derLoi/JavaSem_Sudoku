@@ -3,14 +3,23 @@ package sudoku;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
+/*
+ * @author: LS 
+ * @version: 16/01/2016
+ * @changelog:
+ * 		LS: Methoden setFixVal(), pickValueFromList(), 
+ * 		listToArray() und remValVromPosVals() hinzugefügt		
+ * @desc: Die Cells Klasse erfasst alle Informationen die 
+ * zu den einzelnen Zellen des Sudokus gehören und stellt 
+ * Funktionen zur Manipulation der Inhalte bereit.
+ */
 public class Cells {
-	private int value; // current value
-	private Cells lastCell;
-	private Cells nextCell;
-	private int x; // x-Index of cell
-	private int y; // y-Index of cell
-	private boolean fixVal; // value fix -> nicht verändern
+	private int value; // Aktueller Wert, 0 für leere Zellen
+	private Cells lastCell; // Object der zuvor bearbeiteten Zelle
+	private Cells nextCell; // Object der als nächstes bearbeiteten Zelle
+	private int x; // x-Index der Zelle im Sudoku Array
+	private int y; // y-Index der Zelle im Sudoku Array
+	private boolean fixVal; // 
 	List<Integer> posVal = new ArrayList<Integer>(); // List of possible Values
 														// (int) for this cell
 	List<Integer> excVal = new ArrayList<Integer>(); // List of excluded Values
