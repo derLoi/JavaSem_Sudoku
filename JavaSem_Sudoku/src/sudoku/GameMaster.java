@@ -97,18 +97,7 @@ public class GameMaster {
 			// TODO: Methodenaufruf Eingabe eigenes Sudoku
 			break;
 		case 3:
-			/*
-			 * Auslagern in eigene Methode: System.out.println(
-			 * "Erklärung des Spiels und des Hauptmenüs: \n \n");
-			 * 
-			 * System.out.println(
-			 * "Indem du 0 eingibst, kehrst du ins Hauptmenü zurück, mit 4 beendest du Sudokufy"
-			 * );
-			 * 
-			 * inpInt = scanner.nextInt(); inpString = scanner.nextLine();
-			 * 
-			 * switch (inpInt) { case 0: break; case 4: exit(); break; }
-			 */
+			erklaerung();
 			break;
 		case 4:
 			exit();
@@ -317,6 +306,46 @@ public class GameMaster {
 		System.out.println(result);
 		}
 	
+	private static void erklaerung() {
+		int inpInt;
+		String inpString; 
+
+		System.out.println("Erklärung des Spiels und des Hauptmenüs: \n");
+		System.out.println("Ein Sudoku besteht aus 9x9 Feldern, die zusätzlich in 3x3 Blöcken");
+		System.out.println("mit je 3x3 Feldern aufgeteilt sind. Jede Zeile, jede Spalte und");
+		System.out.println("jeder Block enthält alle Zahlen von 1 bis 9 jeweils genau einmal.");
+		System.out.println("Ausgangspunkt ist ein Gitter, in dem bereits mehrere Ziffern vorgegeben sind.");
+		System.out.println("Da jede Zahl pro Zeile, Spalte und Block nur einmal vorkommen darf,");
+		System.out.println("können durch vorgegebene Zahlen die Positionen für andere Zahlen dieses");
+		System.out.println("Wertes ausgeschlossen werden.");
+		System.out.println("Der Schwierigkeitsgrad eines Sudokus kann sowohl von der Anzahl der vorgegebenen");
+		System.out.println("als auch von der Position der angegebenen Zahlen abhängen. \n");
+		System.out.println("Im Hauptmenü kannst du:");
+		System.out.println("1. Dir ein neues, ganz persönliches Sudoku generieren lassen und es lösen");
+		System.out.println("2. Die vorgegebenen Zahlen eines Sudokus eingeben, um es von Sudokufy lösen zu lassen");
+		System.out.println("3. Diese Erklärung verzückt anschmachten - so oft es dir beliebt");
+		System.out.println("4. Schweren Herzens Sudokufy beenden (um nachts davon zu träumen) \n");		
+		System.out.println("1. Zurück ins Hauptmenü \n" + "2. Sudokufy beenden.");
+
+		Scanner scanner = new Scanner(System.in);
+
+		inpInt = scanner.nextInt();
+		inpString = scanner.nextLine();
+		inpString = null;
+
+		switch (inpInt) {
+		case 1:
+			hauptmenu();
+			scanner.close();
+			break;
+		case 2:
+			exit();
+			break;
+		default:
+			System.out.println("Ungültige Eingabe");
+			break;
+		}
+	}
 	
 	/**
 	 * wann immer das Spiel beendet werden soll, reicht jetzt exit();
