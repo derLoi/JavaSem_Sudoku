@@ -37,14 +37,9 @@ public class GameMaster {
 	public static void hauptmenu() {
 		int inpInt;
 		String inpString;
-		System.out.println("Willkommen bei Sudokufy - von LTML");
-
-		System.out.println();
-
-		// Hauptmenü
-
-		System.out.println("Bitte wähle eine der folgenden Optionen indem du die entsprechende Zahl eingibst:");
-		System.out.println("1. Sudoku spielen \n" + "2. Sudoku lösen lassen \n" + "3. Wie spielt man Sudoku? \n"
+		System.out.println("\nWillkommen bei Sudokufy - von LTML \n\n"
+				+ "Bitte wähle eine der folgenden Optionen indem du die entsprechende Zahl eingibst: \n"
+				+ "1. Sudoku spielen \n" + "2. Sudoku lösen lassen \n" + "3. Wie spielt man Sudoku? \n"
 				+ "4. Sudokufy beenden");
 
 		Scanner scanner = new Scanner(System.in);
@@ -58,33 +53,7 @@ public class GameMaster {
 
 		switch (inpInt) {
 		case 1:
-			System.out.println("Alles klar, ein neues Spiel! \n \n" + "Bitte wähle deine Schwierigkeitsstufe: \n"
-					+ "1. Sehr leicht \n" + "2. Leicht \n" + "3. Mittel \n" + "4. Schwer \n" + "5. Schwer des todes");
-
-			inpInt = scanner.nextInt();
-			inpString = scanner.nextLine();
-
-			switch (inpInt) {
-			case 1:
-				System.out.println("TODO: Hier sollte das Sudoku in 'Sehr leicht' starten");
-				break;
-			case 2:
-				System.out.println("TODO: Hier sollte das Sudoku in 'Leicht' starten");
-				break;
-			case 3:
-				System.out.println("TODO: Hier sollte das Sudoku in 'Mittel' starten");
-				break;
-			case 4:
-				System.out.println("TODO: Hier sollte das Sudoku in 'Schwer' starten");
-				break;
-			case 5:
-				System.out.println("TODO: Hier sollte das Sudoku in 'Schwer des Todes' starten");
-				break;
-			default:
-				System.out.println("Ungültige Eingabe...bitte wähle eine Option 1-5");
-				break;
-			}
-
+			schwierigkeitsgrade();
 			break;
 		case 2:
 			System.out.println("Hallo, wir sind die Cantina Band. Wenn ihr Songwünsche habt, ruft sie einfach!");
@@ -94,14 +63,16 @@ public class GameMaster {
 			erklaerung();
 			break;
 		case 4:
+			scanner.close();
 			exit();
 			break;
 		default:
-			System.out.println("Ungültige Eingabe.");
+			System.out.println("Ungültige Eingabe. Bitte wähle eine der vier Optionen.");
+			hauptmenu();
 			break;
 		}
 		System.out.println();
-		System.out.println("Ok..dann los!");
+		System.out.println("Ok... Dann los!");
 	}
 
 	/**
@@ -245,9 +216,9 @@ public class GameMaster {
 			if (i == 0) {
 				System.out.println("");
 				// Koordinaten 1 - 9 im Kopf
-				System.out.println("       1   2   3   4   5   6   7   8   9");
-				System.out.println("     _____________________________________ ");
-				System.out.println("    |                                     |");
+				System.out.println(
+						"       1   2   3   4   5   6   7   8   9\n" + "     _____________________________________ \n"
+								+ "    |                                     |");
 			}
 			// j := Spalten in Zeile i
 			for (int j = 0; j <= 8; j++) {
@@ -324,26 +295,62 @@ public class GameMaster {
 		System.out.println(result);
 	}
 
+	private static void schwierigkeitsgrade() {
+		int inpInt;
+		String inpString;
+
+		System.out.println("\nAlles klar, ein neues Spiel! \n \n" + "Bitte wähle deine Schwierigkeitsstufe: \n"
+				+ "1. Sehr leicht \n" + "2. Leicht \n" + "3. Mittel \n" + "4. Schwer \n"
+				+ "5. Schwer des Todes of evil doom and darkness");
+
+		Scanner scanner = new Scanner(System.in);
+
+		inpInt = scanner.nextInt();
+		inpString = scanner.nextLine();
+
+		switch (inpInt) {
+		case 1:
+			System.out.println("TODO: Hier sollte das Sudoku in 'Sehr leicht' starten");
+			break;
+		case 2:
+			System.out.println("TODO: Hier sollte das Sudoku in 'Leicht' starten");
+			break;
+		case 3:
+			System.out.println("TODO: Hier sollte das Sudoku in 'Mittel' starten");
+			break;
+		case 4:
+			System.out.println("TODO: Hier sollte das Sudoku in 'Schwer' starten");
+			break;
+		case 5:
+			System.out.println("TODO: Hier sollte das Sudoku in 'Schwer des Todes' starten");
+			break;
+		default:
+			System.out.println("Ungültige Eingabe. Bitte wähle eine der fünf Optionen.");
+			schwierigkeitsgrade();
+			break;
+		}
+	}
+
 	private static void erklaerung() {
 		int inpInt;
 		String inpString;
 
-		System.out.println("Erklärung des Spiels und des Hauptmenüs: \n");
-		System.out.println("Ein Sudoku besteht aus 9x9 Feldern, die zusätzlich in 3x3 Blöcken");
-		System.out.println("mit je 3x3 Feldern aufgeteilt sind. Jede Zeile, jede Spalte und");
-		System.out.println("jeder Block enthält alle Zahlen von 1 bis 9 jeweils genau einmal.");
-		System.out.println("Ausgangspunkt ist ein Gitter, in dem bereits mehrere Ziffern vorgegeben sind.");
-		System.out.println("Da jede Zahl pro Zeile, Spalte und Block nur einmal vorkommen darf,");
-		System.out.println("können durch vorgegebene Zahlen die Positionen für andere Zahlen dieses");
-		System.out.println("Wertes ausgeschlossen werden.");
-		System.out.println("Der Schwierigkeitsgrad eines Sudokus kann sowohl von der Anzahl der vorgegebenen");
-		System.out.println("als auch von der Position der angegebenen Zahlen abhängen. \n");
-		System.out.println("Im Hauptmenü kannst du:");
-		System.out.println("1. Dir ein neues, ganz persönliches Sudoku generieren lassen und es lösen");
-		System.out.println("2. Die vorgegebenen Zahlen eines Sudokus eingeben, um es von Sudokufy lösen zu lassen");
-		System.out.println("3. Diese Erklärung verzückt anschmachten - so oft es dir beliebt");
-		System.out.println("4. Schweren Herzens Sudokufy beenden (um nachts davon zu träumen) \n");
-		System.out.println("1. Zurück ins Hauptmenü \n" + "2. Sudokufy beenden.");
+		System.out.println("\nErklärung des Spiels und des Hauptmenüs: \n\n"
+				+ "Ein Sudoku besteht aus 9x9 Feldern, die zusätzlich in 3x3 Blöcken \n"
+				+ "mit je 3x3 Feldern aufgeteilt sind. Jede Zeile, jede Spalte und \n"
+				+ "jeder Block enthält alle Zahlen von 1 bis 9 jeweils genau einmal. \n"
+				+ "Ausgangspunkt ist ein Gitter, in dem bereits mehrere Ziffern vorgegeben sind. \n"
+				+ "Da jede Zahl pro Zeile, Spalte und Block nur einmal vorkommen darf, \n"
+				+ "können durch vorgegebene Zahlen die Positionen für andere Zahlen dieses \n"
+				+ "Wertes ausgeschlossen werden. \n"
+				+ "Der Schwierigkeitsgrad eines Sudokus kann sowohl von der Anzahl der vorgegebenen \n"
+				+ "als auch von der Position der angegebenen Zahlen abhängen. \n\n" + "Im Hauptmenü kannst du: \n"
+				+ "1. Dir ein neues, ganz persönliches Sudoku generieren lassen und es lösen \n"
+				+ "2. Die vorgegebenen Zahlen eines Sudokus eingeben, um es von Sudokufy lösen zu lassen \n"
+				+ "3. Diese Erklärung verzückt anschmachten - so oft es dir beliebt \n"
+				+ "4. Schweren Herzens Sudokufy beenden (um nachts davon zu träumen) \n\n"
+				+ "Bitte wähle nun eine der folgenden beiden Optionen: \n" + "1. Zurück ins Hauptmenü \n"
+				+ "2. Sudokufy beenden.");
 
 		Scanner scanner = new Scanner(System.in);
 
@@ -354,13 +361,14 @@ public class GameMaster {
 		switch (inpInt) {
 		case 1:
 			hauptmenu();
-			scanner.close();
 			break;
 		case 2:
+			scanner.close();
 			exit();
 			break;
 		default:
-			System.out.println("Ungültige Eingabe");
+			System.out.println("Ungültige Eingabe. Bitte wähle eine der beiden Optionen.");
+			erklaerung();
 			break;
 		}
 	}
