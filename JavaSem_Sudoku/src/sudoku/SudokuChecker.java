@@ -1,7 +1,7 @@
 package sudoku;
 
 import java.util.Arrays;
-
+//TODO Kriegt die Klasse noch Kommentierung?
 public class SudokuChecker {
 
 	public int[] getCurrentRow(Cells[][] sudokuCells, int y) {

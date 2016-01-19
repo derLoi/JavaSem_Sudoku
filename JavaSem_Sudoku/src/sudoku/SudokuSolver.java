@@ -6,8 +6,8 @@ public class SudokuSolver {
 	SudokuChecker check = new SudokuChecker();
 
 	public void solveSudoku(Cells[][] sudokuCells, Cells currentCell) {
-		int stepps;
-		stepps = 0;
+		int steps;
+		steps = 0;
 		while (!check.sudokuIsSolved(sudokuCells)) {
 			if (!check.valIsAllowed(sudokuCells, currentCell, currentCell.getValue()) || currentCell.getValue() == 0) {
 				check.findPosVals(sudokuCells, currentCell);
@@ -27,8 +27,8 @@ public class SudokuSolver {
 			} else {
 				currentCell.setValue(0);
 			}
-			stepps++;
+			steps++;
 		}
-		System.out.println("Solved: it took me " + stepps + " iterations to generate this sudoku for you!");
+		System.out.println("Solved: it took me " + steps + " iterations to generate this sudoku for you!");
 	}
 }

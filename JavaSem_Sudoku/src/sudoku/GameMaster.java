@@ -2,6 +2,7 @@ package sudoku;
 
 import java.util.Random;
 import java.util.Scanner;
+import java.util.InputMismatchException;;
 /*
  * @author: LS 
  * @version: 11/12/2015
@@ -31,6 +32,7 @@ public class GameMaster {
 		// solve given sudoku
 		solve.solveSudoku(sudokuCells, firstEmptyCell(sudokuCells[0][0]));
 		drawBoard();
+		playerEingabe();
 	}
 
 	public static void hauptmenu() {
@@ -58,21 +60,37 @@ public class GameMaster {
 		switch (inpInt) {
 		case 1:
 			System.out.println("Alles klar, ein neues Spiel! \n \n"
-					+ "Bitte wähle deine Schwierigkeitsstufe: Sehr leicht, leicht, mittel, schwer, schwer des todes");
-
+					+ "Bitte wähle deine Schwierigkeitsstufe: \n"
+					+ "1. Sehr leicht \n"
+					+ "2. Leicht \n"
+					+ "3. Mittel \n"
+					+ "4. Schwer \n"
+					+ "5. Schwer des todes");
+			
+			inpInt = scanner.nextInt();
 			inpString = scanner.nextLine();
 
-			if (inpString.equalsIgnoreCase("Sehr leicht")) {
-				System.out.println("Ausgewählt: sehr leicht");
-			} else if (inpString.equalsIgnoreCase("leicht")) {
-				System.out.println("leicht");
-			} else if (inpString.equalsIgnoreCase("mittel")) {
-				System.out.println("mittel");
-			} else if (inpString.equalsIgnoreCase("schwer")) {
-				System.out.println("schwer");
-			} else if (inpString.equalsIgnoreCase("schwer des todes")) {
-				System.out.println("schwer des todes");
+			switch (inpInt) {
+			case 1:
+				System.out.println("TODO: Hier sollte das Sudoku in 'Sehr leicht' starten");
+				break;
+			case 2:
+				System.out.println("TODO: Hier sollte das Sudoku in 'Leicht' starten");
+				break;
+			case 3:
+				System.out.println("TODO: Hier sollte das Sudoku in 'Mittel' starten");
+				break;
+			case 4:
+				System.out.println("TODO: Hier sollte das Sudoku in 'Schwer' starten");
+				break;
+			case 5:
+				System.out.println("TODO: Hier sollte das Sudoku in 'Schwer des Todes' starten");
+				break;
+			default:
+				System.out.println("Ungültige Eingabe...bitte wähle eine Option 1-5");
+				break;
 			}
+		
 			break;
 		case 2:
 			System.out.println("Hallo, wir sind die Cantina Band. Wenn ihr Songwünsche habt, ruft sie einfach!");
@@ -99,6 +117,7 @@ public class GameMaster {
 			System.out.println("Ungültige Eingabe.");
 			break;
 		}
+		System.out.println();
 		System.out.println("Ok..dann los!");
 	}
 
@@ -258,6 +277,7 @@ public class GameMaster {
 			// letzte Zeile mit abschließendem Rahmen
 			if (i == 8) {
 				System.out.println("    |_____________________________________|");
+				System.out.println();
 			}
 			/*
 			 * Durch einen Rahmen nach der 3. und der 6. Zeile wird die optische
@@ -276,11 +296,33 @@ public class GameMaster {
 			}
 		}
 	}
+		
+	public static void playerEingabe(){
+		Scanner playerCoordinate = new Scanner(System.in);
+		SudokuChecker check = new SudokuChecker(); 
+		System.out.println("Welche Zelle möchtest du befüllen? Bitte gib deine Wahl in der Form 'A3' (Beispiel) ein.");
+		String input = playerCoordinate.next().toLowerCase();
+		int playerValue = playerCoordinate.nextInt();
+		String temp = playerCoordinate.nextLine();
+		//Buchstaben (zeilenbezeichnung) an erster Stelle der EIngabe auslesen
+		//Buchstaben in jeweiliges ASCII-Äquivalent umwandeln (a = 97, b = 98...)
+		int chosenRow = (int) input.charAt(0) - 97;
+		//Liest nur die Zahlen aus dem eingegebenen String aus und speichert sie als int
+		String numbersOnly = input.charAt(1) + "";
+		int chosenColumn = Integer.parseInt(numbersOnly) - 1;
+		System.out.println(chosenRow);
+		System.out.println(chosenColumn);
+		System.out.println(playerValue);
+		boolean result = check.valIsAllowed(sudokuCells, sudokuCells[chosenRow][chosenColumn], playerValue);
+		System.out.println(result);
+		}
+	
+	
 	/**
 	 * wann immer das Spiel beendet werden soll, reicht jetzt exit();
 	 */
 	private static void exit() {
-		System.out.println("Tschüüü");
+		System.out.println("Schüss!");
 		System.exit(1);
 	}
 }
