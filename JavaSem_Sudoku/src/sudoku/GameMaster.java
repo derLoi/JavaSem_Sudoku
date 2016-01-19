@@ -331,6 +331,7 @@ public class GameMaster {
 					// b = 98...), als int speichern und
 					// auf formelle Korrektheit prüfen
 					int chosenRow = (int) coorInput.charAt(0) - 97;
+					System.out.println(chosenRow);
 					if (chosenRow < 0 || chosenRow > 8) {
 						System.out.println("Deine Zeilekoordinate hat leider nicht gepasst. Bitte wähle Zeile A-I!");
 						playerEingabe();
