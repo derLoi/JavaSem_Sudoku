@@ -342,7 +342,7 @@ public class GameMaster {
 				System.out.println("Deine Spaltenkoordinate hat leider nicht gepasst. Bitte wähle Spalten 1-9!");
 				playerEingabe();
 			} else {
-		System.out.println("TODO: Hier irgendwie den Wert " + playerValue + " in Reihe" + chosenRow + " und Spalte " + chosenColumn +  " packen.");
+		System.out.println("TODO: Hier irgendwie den Wert " + playerValue + " in Reihe " + (chosenRow + 1) + " und Spalte " + (chosenColumn + 1) +  " packen.");
 		// Die ganze Eingabe wird auf ihre numerische Korrektheit im Sudoku geprüft
 		boolean result = check.valIsAllowed(sudokuCells, sudokuCells[chosenRow][chosenColumn], playerValue);
 			if (result == false)
