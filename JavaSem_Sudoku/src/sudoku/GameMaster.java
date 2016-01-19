@@ -2,16 +2,16 @@ package sudoku;
 
 import java.util.Random;
 import java.util.Scanner;
-import java.util.InputMismatchException;;
+import java.util.InputMismatchException;
 /*
- * @author: LS 
- * @version: 11/12/2015
- * @changelog:
- * 		MW: Abfrage der Schwierigkeitsstufe eingebaut
- * 		TM: Überarbeitetungen der Spielfeldanzeige
- * 		LS: Test mit Gültigkeitsprüfung für zufällig generiertes Sudoku. Ausgabe Ergebnisse
- * 		LS: Methoden fillRndVal(), insertFixVal() und firstEmptyCell() hinzugefügt
- * @desc: kontrolliert den Spielablauf.
+ * kontrolliert den Spielablauf.
+ * @version: 11/12/2015 <br>
+ * <ul>
+ * 		<li>MW: Abfrage der Schwierigkeitsstufe eingebaut</li>
+ * 		<li>TM: Überarbeitetungen der Spielfeldanzeige</li>
+ * 		<li>LS: Test mit Gültigkeitsprüfung für zufällig generiertes Sudoku. Ausgabe Ergebnisse</li>
+ * 		<li>LS: Methoden fillRndVal(), insertFixVal() und firstEmptyCell() hinzugefügt</li>
+ * </ul>
  */
 
 public class GameMaster {
@@ -28,7 +28,6 @@ public class GameMaster {
 		// Fill first random numbers
 		fillRndVal();
 		drawBoard();
-
 		// solve given sudoku
 		solve.solveSudoku(sudokuCells, firstEmptyCell(sudokuCells[0][0]));
 		drawBoard();
@@ -59,14 +58,9 @@ public class GameMaster {
 
 		switch (inpInt) {
 		case 1:
-			System.out.println("Alles klar, ein neues Spiel! \n \n"
-					+ "Bitte wähle deine Schwierigkeitsstufe: \n"
-					+ "1. Sehr leicht \n"
-					+ "2. Leicht \n"
-					+ "3. Mittel \n"
-					+ "4. Schwer \n"
-					+ "5. Schwer des todes");
-			
+			System.out.println("Alles klar, ein neues Spiel! \n \n" + "Bitte wähle deine Schwierigkeitsstufe: \n"
+					+ "1. Sehr leicht \n" + "2. Leicht \n" + "3. Mittel \n" + "4. Schwer \n" + "5. Schwer des todes");
+
 			inpInt = scanner.nextInt();
 			inpString = scanner.nextLine();
 
@@ -90,7 +84,7 @@ public class GameMaster {
 				System.out.println("Ungültige Eingabe...bitte wähle eine Option 1-5");
 				break;
 			}
-		
+
 			break;
 		case 2:
 			System.out.println("Hallo, wir sind die Cantina Band. Wenn ihr Songwünsche habt, ruft sie einfach!");
@@ -110,31 +104,39 @@ public class GameMaster {
 		System.out.println("Ok..dann los!");
 	}
 
-/**
- * 
- */
+	/**
+	 * Generiert ein leeres Sudoku Spielfeld indem die benötigten Cells Objects
+	 * initialisiert werden und die Linked List verknüpft wird.
+	 */
 	public static void genSudoku() {
-		// Hilfsvariablen
-		Cells currentCell = null;
+		// Hilfsvariable zum Zwischenspeichern der Objects
 		Cells lastCell = null;
-
+		// Schleife durch das Sudoku Spielfeld Array
 		for (int i = 0; i <= 8; i++) {
 			for (int j = 0; j <= 8; j++) {
+				/*
+				 * erstelle ein neues Cells Object mit den x/y-Koordinaten der
+				 * aktuellen Zelle im sudokuCells Array
+				 */
 				sudokuCells[i][j] = new Cells(j, i);
 			}
 		}
-		// set first last cell
+		// speichere letzte Zelle als erste "letzte Zelle"
 		lastCell = sudokuCells[8][8];
-		// link objects as double linked list
+		// Schleife durch das Sudoku Spielfeld Array
 		for (int i = 0; i <= 8; i++) {
 			for (int j = 0; j <= 8; j++) {
-				currentCell = sudokuCells[i][j];
-				currentCell.setLastCell(lastCell);
-				lastCell.setNextCell(currentCell);
-				lastCell = currentCell;
+				/*
+				 * erzeuge die Linked List indem die letzte Zelle mit der
+				 * betrachteten Zelle verbunden werden
+				 */
+				sudokuCells[i][j].setLastCell(lastCell);
+				lastCell.setNextCell(sudokuCells[i][j]);
+				// speichere die betrachtete Zelle als neue letzte Zelle
+				lastCell = sudokuCells[i][j];
 			}
 		}
-		// correctly link last cell
+		// verknüüfe die letzte Zelle mit der ersten Zelle
 		sudokuCells[8][8].setNextCell(sudokuCells[0][0]);
 	}
 
@@ -148,18 +150,32 @@ public class GameMaster {
 		// Hilfsvariablen erstellen
 		int num;
 		boolean bln;
-		// i := Zellen in Zeile
+		// i := Zellen in erster Zeile
 		for (int i = 0; i <= 8; i++) {
+			// führe Code aus. prüfe ob bln false ist
 			do {
-				num = rnd.nextInt(9) + 1; // neue Zufallszahl zw. 1 - 9 erzeugen
-				bln = true; // Fehler-Indikator zurücksetzen
+				// neue Zufallszahl zwischen 1 - 9 erzeugen
+				num = rnd.nextInt(9) + 1;
+				// Fehler-Indikator bln zurücksetzen
+				bln = true;
+				// Schleife durch die erste Zeile bis zur betrachteten Zelle
 				for (int j = 0; j <= i; j++) {
+					// prüfe ob generierter Zufallswert bereits verwendet wurde
 					if (num == sudokuCells[0][j].getValue()) {
+						/*
+						 * wurde der Wert bereits verwendet, setze den
+						 * Fehler-Indikator auf 0
+						 */
 						bln = false;
+						// beende die for-Schleife um neuen Wert zu suchen
 						break;
 					}
 				}
-			} while (bln == false);
+			} while (!bln);
+			/*
+			 * ist der zufällig generierte Wert gültig, speichere diesen in der
+			 * betrachteten Zelle
+			 */
 			insertFixVal(sudokuCells, i, 0, num);
 		}
 	}
@@ -170,13 +186,13 @@ public class GameMaster {
 	 * value und löscht das Object aus der linked list
 	 * 
 	 * @param sudokuCells
-	 *            9x9-Array mit einem Cells-Objects in jedem Feld
+	 *            das 9x9-Array mit einem Cells-Objects in jedem Feld
 	 * @param x
-	 *            X-Index des Class-Objects im Sudoku Spielfeld
+	 *            der x-Index des Class-Objects im Sudoku Spielfeld
 	 * @param y
-	 *            Y-Index des Class-Objects im Sudoku Spielfeld
+	 *            der y-Index des Class-Objects im Sudoku Spielfeld
 	 * @param value
-	 *            Wert des Class-Objects: Startwert für ein Feld im Sudoku
+	 *            der Wert des Class-Objects: Startwert für ein Feld im Sudoku
 	 *            Spielfeld
 	 */
 	public static void insertFixVal(Cells[][] sudokuCells, int x, int y, int value) {
@@ -285,18 +301,20 @@ public class GameMaster {
 			}
 		}
 	}
-		
-	public static void playerEingabe(){
+
+	public static void playerEingabe() {
 		Scanner playerCoordinate = new Scanner(System.in);
-		SudokuChecker check = new SudokuChecker(); 
+		SudokuChecker check = new SudokuChecker();
 		System.out.println("Welche Zelle möchtest du befüllen? Bitte gib deine Wahl in der Form 'A3' (Beispiel) ein.");
 		String input = playerCoordinate.next().toLowerCase();
 		int playerValue = playerCoordinate.nextInt();
 		String temp = playerCoordinate.nextLine();
-		//Buchstaben (zeilenbezeichnung) an erster Stelle der EIngabe auslesen
-		//Buchstaben in jeweiliges ASCII-Äquivalent umwandeln (a = 97, b = 98...)
+		// Buchstaben (zeilenbezeichnung) an erster Stelle der EIngabe auslesen
+		// Buchstaben in jeweiliges ASCII-Äquivalent umwandeln (a = 97, b =
+		// 98...)
 		int chosenRow = (int) input.charAt(0) - 97;
-		//Liest nur die Zahlen aus dem eingegebenen String aus und speichert sie als int
+		// Liest nur die Zahlen aus dem eingegebenen String aus und speichert
+		// sie als int
 		String numbersOnly = input.charAt(1) + "";
 		int chosenColumn = Integer.parseInt(numbersOnly) - 1;
 		System.out.println(chosenRow);
@@ -304,11 +322,11 @@ public class GameMaster {
 		System.out.println(playerValue);
 		boolean result = check.valIsAllowed(sudokuCells, sudokuCells[chosenRow][chosenColumn], playerValue);
 		System.out.println(result);
-		}
-	
+	}
+
 	private static void erklaerung() {
 		int inpInt;
-		String inpString; 
+		String inpString;
 
 		System.out.println("Erklärung des Spiels und des Hauptmenüs: \n");
 		System.out.println("Ein Sudoku besteht aus 9x9 Feldern, die zusätzlich in 3x3 Blöcken");
@@ -324,7 +342,7 @@ public class GameMaster {
 		System.out.println("1. Dir ein neues, ganz persönliches Sudoku generieren lassen und es lösen");
 		System.out.println("2. Die vorgegebenen Zahlen eines Sudokus eingeben, um es von Sudokufy lösen zu lassen");
 		System.out.println("3. Diese Erklärung verzückt anschmachten - so oft es dir beliebt");
-		System.out.println("4. Schweren Herzens Sudokufy beenden (um nachts davon zu träumen) \n");		
+		System.out.println("4. Schweren Herzens Sudokufy beenden (um nachts davon zu träumen) \n");
 		System.out.println("1. Zurück ins Hauptmenü \n" + "2. Sudokufy beenden.");
 
 		Scanner scanner = new Scanner(System.in);
@@ -346,7 +364,7 @@ public class GameMaster {
 			break;
 		}
 	}
-	
+
 	/**
 	 * wann immer das Spiel beendet werden soll, reicht jetzt exit();
 	 */
