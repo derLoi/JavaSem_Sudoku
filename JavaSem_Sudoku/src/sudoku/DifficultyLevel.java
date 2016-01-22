@@ -1,18 +1,18 @@
 package sudoku;
 
 import java.util.*;
+
 /**
  * 
  * @version 19/01/16
- * Klasse für (erstmal nur) die Schwerigkeitsstufen + die Range (min max) der leeren Zellen
- *
+ * Klasse für (erst mal nur) die Schwierigkeitsstufen + die Range (min max) der leeren Zellen
  */
-public class DifficultyLevel {
+public enum DifficultyLevel {
 
 	SEHR_LEICHT(28,30),
 	LEICHT(31,44),
 	MITTEL(45,49),
-	SCHWER(49,54),
+	SCHWER(50,54),
 	SCHWER_DES_TODES(55,61);
 
 	private final int min;

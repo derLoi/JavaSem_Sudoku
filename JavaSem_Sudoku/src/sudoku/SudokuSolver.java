@@ -1,5 +1,7 @@
 package sudoku;
 
+import java.util.*;
+
 /**
  * Löst ein gegebenes Sudoku mit Hilfe eines brute force Algorithmus.
  * 
@@ -77,5 +79,50 @@ public class SudokuSolver {
 		}
 		// Nutzer-Feedback: wie schnell konnte das Sudoku gelöst werden
 		System.out.println("Solved: it took me " + steps + " iterations to generate this sudoku for you!");
+		Cells lastCell = sudokuCells[8][8];
+		for (int i = 0; i < 9; i++){
+			for (int j = 0; j < 9; j++){
+				currentCell = sudokuCells[i][j];
+				if (!currentCell.excVal.isEmpty())
+					currentCell.excVal.clear();
+				currentCell.setFixVal(false);
+				currentCell.setLastCell(lastCell);
+				currentCell.getLastCell().setNextCell(currentCell);	
+			}
+		}
+		currentCell.setNextCell(sudokuCells[0][0]);
+	}
+	
+	public void digHoles(Cells[][] sudokuCells, int min, int max){
+		Random rnd = new Random();
+		int rndY;
+		int rndX;
+		Cells currentCell;
+		// Anzahl Zellen, die ausgeschnitten werden
+		int rndNum = rnd.nextInt((max - min) + 1) + min;
+		// Zellen ausschneiden
+		while(rndNum > 0){
+			 rndY = rnd.nextInt(9);
+			 rndX = rnd.nextInt(9);
+			currentCell = sudokuCells[rndY][rndX];
+			if(currentCell.getValue() != 0){
+				// Wert 0 = Zelle leer
+				currentCell.setValue(0);
+				// rndNum decrement
+				rndNum--;
+			}
+		}
+		for (int i = 0; i < 9; i++){
+			for (int j = 0; j < 9; j++){
+				currentCell = sudokuCells[i][j];
+				if (currentCell.getValue() > 0){
+					// Wert ist Startwert = fix
+					currentCell.setFixVal(true);
+					// Linked List anpassen
+					currentCell.getLastCell().setNextCell(currentCell.getNextCell());
+					currentCell.getNextCell().setLastCell(currentCell.getLastCell());	
+				}
+			}
+		}
 	}
 }
