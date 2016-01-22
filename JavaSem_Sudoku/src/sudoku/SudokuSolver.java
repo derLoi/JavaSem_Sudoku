@@ -1,111 +1,128 @@
 package sudoku;
 
+import java.util.*;
+
+/**
+ * Löst ein gegebenes Sudoku mit Hilfe eines brute force Algorithmus.
+ * 
+ * @version 17/01/2016
+ */
 public class SudokuSolver {
-	// 1. erstes oder nächstes freies Feld (0) wählen
-	// 2. Beschränkung Zeile/Spalte/Box: alle möglichen Zahlen auswählen
-	private Cells lastCell;
+	// SudokuChecker Object initialisieren
+	SudokuChecker check = new SudokuChecker();
 
-	public void solveSudoku(Cells[][] sudokuCells) {
-		while (getNextEmptyCell(sudokuCells) != null) {
-			Cells currentCell = getNextEmptyCell(sudokuCells);
-			// Letzte Zelle speichern (außer bei erster freier Zelle)
-			if (lastCell != null) {
+	/**
+	 * Der Algorithmus versucht durch zufälliges einsetzen der Zahlen 1 - 9
+	 * unter den Rahmenbedingungen des Sudokuregelwerkes eine Lösung für ein
+	 * Sudokurätsel zu finden. Dabei werden die Zellen nacheinander abgearbeitet
+	 * und bei einem Fehler in umgekehrter Reihenfolge korrigiert.
+	 * 
+	 * @param sudokuCells
+	 *            das Cells-Array des Sudoku Spielfelds.
+	 * @param currentCell
+	 *            die betrachtete Zelle.
+	 */
+	public void solveSudoku(Cells[][] sudokuCells, Cells currentCell) {
+		// Zählvariable steps initialisieren
+		int steps;
+		// steps zurücksetzen
+		steps = 0;
+		// prüfen ob Sudoku gelöst ist. Wenn nicht Schleife ausführen
+		while (!check.sudokuIsSolved(sudokuCells)) {
+			/*
+			 * prüfen ob in der Zelle ein ungültiger Wert gespeichert ist oder
+			 * ob kein Wert vorhanden ist (0)
+			 */
+			if (!check.valIsAllowed(sudokuCells, currentCell, currentCell.getValue()) || currentCell.getValue() == 0) {
+				// alle möglichen Werte für die Zelle ermitteln
+				check.findPosVals(sudokuCells, currentCell);
+				// prüfen ob mögliche Werte gefunden wurden
+				if (currentCell.posVal.isEmpty()) {
+					/*
+					 * Backtracking wenn keine Werte gefunden wurden.
+					 * Lösungswert der Zelle leeren (0)
+					 */
+					currentCell.setValue(0);
+					// prüfen ob für die Zelle ausgeschlossene Werte existieren
+					if (!currentCell.excVal.isEmpty()) {
+						// wenn ausgeschlossene Werte existieren, lösche diesee
+						currentCell.excVal.clear();
+					}
+					/*
+					 * füge zur letzen Zelle den Lösungswert der letzten Zelle
+					 * zur Liste der ausgeschlossenen Werte hinzu
+					 */
+					currentCell.getLastCell().addValueToExcVals(currentCell.getLastCell().getValue());
+					/*
+					 * mache einen Schritt zurück: neue betrachtete Zelle ist
+					 * die letzte Zelle
+					 */
+					currentCell = currentCell.getLastCell();
+				} else if (!currentCell.posVal.isEmpty()) {
+					/*
+					 * wurden mögliche Werte gefunden, wähle einen Wert als
+					 * Lösungswert
+					 */
+					currentCell.pickValueFromList();
+					/*
+					 * mache einen Schritt vorwärts: neue betrachtete Zelle ist
+					 * die nächste Zelle
+					 */
+					currentCell = currentCell.getNextCell();
+				}
+			} else {
+				// setze den Lösungswert der aktuellen Zelle zurück
+				currentCell.setValue(0);
+			}
+			// incrementiere die Zählvariable
+			steps++;
+		}
+		// Nutzer-Feedback: wie schnell konnte das Sudoku gelöst werden
+		System.out.println("Solved: it took me " + steps + " iterations to generate this sudoku for you!");
+		Cells lastCell = sudokuCells[8][8];
+		for (int i = 0; i < 9; i++){
+			for (int j = 0; j < 9; j++){
+				currentCell = sudokuCells[i][j];
+				if (!currentCell.excVal.isEmpty())
+					currentCell.excVal.clear();
+				currentCell.setFixVal(false);
 				currentCell.setLastCell(lastCell);
-				lastCell.setNextCell(currentCell);
-			}
-			// Alle möglichen Werte für aktuelle Zelle finden
-			if (currentCell.posVal.isEmpty()) {
-				findPosVals(currentCell, sudokuCells);
-			}
-			// Wenn Werte vorhanden sind, wähle einen Zufälligen aus
-			System.out.println("posVal is Empty: " + currentCell.posVal.isEmpty());
-			if (currentCell.posVal.isEmpty() == false) {
-				currentCell.pickValueFromList();
-				lastCell = currentCell;
-			} else if (currentCell.posVal.isEmpty() == true) {
-				System.out.println(
-						"stepped back at Cell: " + (char) (currentCell.getY() + 65) + (currentCell.getX() + 1));
-				stepBack(currentCell.getLastCell());
+				currentCell.getLastCell().setNextCell(currentCell);	
 			}
 		}
+		currentCell.setNextCell(sudokuCells[0][0]);
 	}
-
-	public void stepBack(Cells currentCell) {
-		currentCell.excVal.add(currentCell.getValue());
-		currentCell.setValue(0);
-		currentCell.getNextCell().excVal.clear();
-		System.out.println("stepped back to Cell: " + (char) (currentCell.getY() + 65) + (currentCell.getX() + 1));
-	}
-
-	public void findPosVals(Cells currentCell, Cells[][] sudokuCells) {
-		for (int i = 1; i <= 9; i++) {
-			if (valIsAllowed(sudokuCells, currentCell.getX(), currentCell.getY(), i, currentCell)) {
-				currentCell.posVal.add(i);
-				System.out.println("added " + i + " to List of posVal");
+	
+	public void digHoles(Cells[][] sudokuCells, int min, int max){
+		Random rnd = new Random();
+		int rndY;
+		int rndX;
+		Cells currentCell;
+		// Anzahl Zellen, die ausgeschnitten werden
+		int rndNum = rnd.nextInt((max - min) + 1) + min;
+		// Zellen ausschneiden
+		while(rndNum > 0){
+			 rndY = rnd.nextInt(9);
+			 rndX = rnd.nextInt(9);
+			currentCell = sudokuCells[rndY][rndX];
+			if(currentCell.getValue() != 0){
+				// Wert 0 = Zelle leer
+				currentCell.setValue(0);
+				// rndNum decrement
+				rndNum--;
 			}
 		}
-	}
-
-	public Cells getNextEmptyCell(Cells[][] sudokuCells) {
-		for (int i = 0; i <= 8; i++) {
-			for (int j = 0; j <= 8; j++) {
-				if (sudokuCells[i][j].getValue() == 0) {
-					// System.out.println("Nächste leere Zelle: " + (char) (i +
-					// 65) + (j + 1));
-					return sudokuCells[i][j];
+		for (int i = 0; i < 9; i++){
+			for (int j = 0; j < 9; j++){
+				currentCell = sudokuCells[i][j];
+				if (currentCell.getValue() > 0){
+					// Wert ist Startwert = fix
+					currentCell.setFixVal(true);
+					// Linked List anpassen
+					currentCell.getLastCell().setNextCell(currentCell.getNextCell());
+					currentCell.getNextCell().setLastCell(currentCell.getLastCell());	
 				}
 			}
 		}
-		// Keine leere Zelle mehr übrig
-		return null;
-	}
-
-	public int[] getCurrentRow(Cells[][] sudokuCells, int y) {
-		int[] row = new int[9];
-		// i := Spalten
-		for (int i = 0; i <= 8; i++) {
-			// Zeilen 0 - 8 aus Sudoku-Array in row speichern
-			row[i] = sudokuCells[y][i].getValue();
-		}
-		return row;
-	}
-
-	public int[] getCurrentCol(Cells[][] sudokuCells, int x) {
-		int[] col = new int[9];
-		// i := Zeilen
-		for (int i = 0; i <= 8; i++) {
-			// Zeilen 0 - 8 aus Sudoku-Array in row speichern
-			col[i] = sudokuCells[i][x].getValue();
-		}
-		return col;
-	}
-
-	public int[] getCurrentBox(Cells[][] sudokuCells, int x, int y) {
-		int temp = 0;
-		int[] box = new int[9];
-		int startZ = (y / 3) * 3;
-		int startS = (x / 3) * 3;
-		for (int i = startZ; i <= (startZ + 2); i++) {
-			// n := Spalten in Zeile m in Box
-			for (int j = startS; j <= (startS + 2); j++) {
-				// temp Index für Reihen-Array box
-				box[temp] = sudokuCells[i][j].getValue();
-				// temp inkrementieren
-				temp++;
-			}
-		}
-		return box;
-	}
-	
-	public Boolean valIsAllowed(Cells[][] sudokuCells, int x, int y, int value, Cells currentCell) {
-		SudokuChecker check = new SudokuChecker();
-		int[] excVals;
-		Boolean bln;
-		bln = check.checkNum(getCurrentRow(sudokuCells, y), value);
-		bln = bln && check.checkNum(getCurrentCol(sudokuCells, x), value);
-		bln = bln && check.checkNum(getCurrentBox(sudokuCells, x, y), value);
-		excVals = currentCell.listToArray(currentCell.excVal);
-		bln = bln && check.checkNum(excVals, value);
-		return bln;
 	}
 }
