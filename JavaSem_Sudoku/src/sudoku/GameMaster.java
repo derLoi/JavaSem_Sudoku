@@ -397,8 +397,8 @@ public class GameMaster {
 
 		switch (inpInt) {
 		case 1:
-			minBlankCells = 4;
-			maxBlankCells = 5;
+			minBlankCells = 28;
+			maxBlankCells = 30;
 			solve.digHoles(sudokuCells, minBlankCells, maxBlankCells);
 			System.out.println("Ein sehr leichtes Sudoku wird gestartet");
 			break;
