@@ -31,18 +31,15 @@ public class GameMaster {
 	public static void main(String[] args) {
 		SudokuSolver solve = new SudokuSolver();
 		SudokuChecker check = new SudokuChecker();
-		// generate objects in array
 		genSudoku();
-		// Fill first random numbers
 		fillRndVal();
-		// solve given sudoku
 		solve.solveSudoku(sudokuCells, firstEmptyCell(sudokuCells[0][0]));
 		hauptmenu();
 		drawBoard();
 		while (!check.sudokuIsSolved(sudokuCells)) {
 			playerEingabe(sudokuCells);
 		}
-		System.out.println("Gelöst");
+		System.out.println("Sehr gut, Sudoku gelöst!");
 	}
 
 	public static void hauptmenu() {
@@ -54,12 +51,14 @@ public class GameMaster {
 				+ "4. Sudokufy beenden");
 
 		Scanner scanner = new Scanner(System.in);
-
-		inpInt = scanner.nextInt(); // nextInt() bewirkt keinen
-									// Zeilenumbruch, sodass der Scanner
-									// immer noch in derselben Zeile bleibt.
-									// Deswegen nextLine(), um input
-									// skipping zu verhindern
+		//Exception für Eingabe von Buchstaben/Strings schmeißen
+		try{
+		// nextInt() bewirkt keinen
+		// Zeilenumbruch, sodass der Scanner
+		// immer noch in derselben Zeile bleibt.
+		// Deswegen nextLine(), um input
+		// skipping zu verhindern
+		inpInt = scanner.nextInt(); 
 		inpString = scanner.nextLine();
 
 		switch (inpInt) {
@@ -68,7 +67,7 @@ public class GameMaster {
 			break;
 		case 2:
 			System.out.println("Hallo, wir sind die Cantina Band. Wenn ihr Songwünsche habt, ruft sie einfach!");
-			// TODO: Methodenaufruf Eingabe eigenes Sudoku
+			insertOwnSudoku();
 			break;
 		case 3:
 			erklaerung();
@@ -84,6 +83,12 @@ public class GameMaster {
 		}
 		System.out.println();
 		System.out.println("Ok... Dann los!");
+		} catch (InputMismatchException e){
+			System.out.println();
+			System.out.println("Ungültige Eingabe, bitte wähle eine der Menüoptionen.");
+			System.out.println();
+			hauptmenu();
+		}
 	}
 
 	/**
@@ -293,12 +298,23 @@ public class GameMaster {
 		SudokuChecker check = new SudokuChecker();
 		System.out.println();
 		System.out.println(
-				"Welche Zelle möchtest du befüllen? Bitte gib deine Wahl in der Form 'A3 3' (Koordinate + Leerzeichen + dein Wert) ein.");
+				"Welche Zelle möchtest du befüllen? Bitte gib deine Wahl in der Form 'A3 3' (Koordinate + Leerzeichen + dein Wert) ein.\n" +
+				"Sonst kannst du mit '1' ins Hauptmenü zurückkehren und mit '2' das Spiel beenden");
 		// Eingabe auslesen und Zeilenkoordinate zu Kleinbuchstaben
 		String completeInput = playerCoordinate.nextLine().toLowerCase();
 		// System.out.println(completeInput);
 		try {
 			// Fehler in der Eingabe'form' (Länge, Leerzeichen) behandeln
+			switch (completeInput) {
+			case "1":
+				hauptmenu();
+				break;
+			case "2":
+				playerCoordinate.close();
+				exit();
+				break;
+			default:
+				
 			if (completeInput.length() < 4) {
 				System.out.println(
 						"Deine Eingabe war leider zu kurz. Keep in mind: Koordinate (z.B. A3) + Leerzeichen + dein Wert (z.B. 6)");
@@ -329,8 +345,7 @@ public class GameMaster {
 
 					// Den Buchstaben (Zeilenbezeichnung) an erster Stelle der
 					// Eingabe auslesen
-					// Buchstaben in jeweiliges ASCII-Äquivalent umwandeln (a =
-					// 97,
+					// Buchstaben in jeweiliges ASCII-Äquivalent umwandeln (a = 97,
 					// b = 98...), als int speichern und
 					// auf formelle Korrektheit prüfen
 					int chosenRow = (int) coorInput.charAt(0) - 97;
@@ -340,8 +355,7 @@ public class GameMaster {
 					} else {
 
 						// Liest aus der eingegebenen Koordinate den character
-						// an
-						// der zweiten
+						// an der zweiten
 						// Stelle, wandelt es in einen int um und speichert
 						// diesen.
 						// Ebenfalls wird auf formelle Korrektheit geprüft
@@ -371,8 +385,9 @@ public class GameMaster {
 						}
 					}
 				}
-			}
+			} break;
 		}
+	}
 
 		catch (NumberFormatException ex) { // Falls der Spieler einen
 											// Buchstaben/String statt der
@@ -473,6 +488,10 @@ public class GameMaster {
 			erklaerung();
 			break;
 		}
+	}
+	
+	private static void insertOwnSudoku() {
+		drawBoard();
 	}
 
 	/**
