@@ -27,12 +27,10 @@ public class GameMaster {
 	private static Cells[][] sudokuCells = new Cells[9][9];
 	private static int minBlankCells;
 	private static int maxBlankCells;
+	private static SudokuChecker check = new SudokuChecker();
+	private static SudokuSolver solve = new SudokuSolver();
 
 	public static void main(String[] args) {
-		SudokuChecker check = new SudokuChecker();
-		genSudoku();
-//		fillRndVal();
-//		solve.solveSudoku(sudokuCells, firstEmptyCell(sudokuCells[0][0]));
 		hauptmenu();
 		drawBoard();
 		while (!check.sudokuIsSolved(sudokuCells)) {
@@ -51,41 +49,43 @@ public class GameMaster {
 				+ "4. Sudokufy beenden");
 
 		Scanner scanner = new Scanner(System.in);
-		//Exception für Eingabe von Buchstaben/Strings schmeißen
-		try{
-		// nextInt() bewirkt keinen
-		// Zeilenumbruch, sodass der Scanner
-		// immer noch in derselben Zeile bleibt.
-		// Deswegen nextLine(), um input
-		// skipping zu verhindern
-		inpInt = scanner.nextInt(); 
-		inpString = scanner.nextLine();
+		// Exception für Eingabe von Buchstaben/Strings schmeißen
+		try {
+			// nextInt() bewirkt keinen
+			// Zeilenumbruch, sodass der Scanner
+			// immer noch in derselben Zeile bleibt.
+			// Deswegen nextLine(), um input
+			// skipping zu verhindern
+			inpInt = scanner.nextInt();
+			inpString = scanner.nextLine();
 
-		switch (inpInt) {
-		case 1:
-			fillRndVal();
-			solve.solveSudoku(sudokuCells, firstEmptyCell(sudokuCells[0][0]));
-			schwierigkeitsgrade();
-			break;
-		case 2:
-			System.out.println("Hallo, wir sind die Cantina Band. Wenn ihr Songwünsche habt, ruft sie einfach!");
-			insertOwnSudoku();
-			break;
-		case 3:
-			erklaerung();
-			break;
-		case 4:
-			scanner.close();
-			exit();
-			break;
-		default:
-			System.out.println("Ungültige Eingabe. Bitte wähle eine der vier Optionen.");
-			hauptmenu();
-			break;
-		}
-		System.out.println();
-		System.out.println("Ok... Dann los!");
-		} catch (InputMismatchException e){
+			switch (inpInt) {
+			case 1:
+				genSudoku();
+				fillRndVal();
+				solve.solveSudoku(sudokuCells, firstEmptyCell(sudokuCells[0][0]));
+				schwierigkeitsgrade();
+				break;
+			case 2:
+				genSudoku();
+				System.out.println("Hallo, wir sind die Cantina Band. Wenn ihr Songwünsche habt, ruft sie einfach!");
+				insertOwnSudoku();
+				break;
+			case 3:
+				erklaerung();
+				break;
+			case 4:
+				scanner.close();
+				exit();
+				break;
+			default:
+				System.out.println("Ungültige Eingabe. Bitte wähle eine der vier Optionen.");
+				hauptmenu();
+				break;
+			}
+			System.out.println();
+			System.out.println("Ok... Dann los!");
+		} catch (InputMismatchException e) {
 			System.out.println();
 			System.out.println("Ungültige Eingabe, bitte wähle eine der Menüoptionen.");
 			System.out.println();
@@ -199,7 +199,7 @@ public class GameMaster {
 		sudokuCells[y][x].getLastCell().setNextCell(sudokuCells[y][x].getNextCell());
 		sudokuCells[y][x].getNextCell().setLastCell(sudokuCells[y][x].getLastCell());
 	}
-
+	
 	/**
 	 * Findet ausgehend von der übergebenen Zelle, die erste Zelle, die keinen
 	 * unveränderlichen Startwert (Attribut: fixVal) enthält.
@@ -219,7 +219,6 @@ public class GameMaster {
 		// Übergebe gefundene Zelle
 		return currentCell;
 	}
-
 	/**
 	 * Zeichnet ein Sudoku Spielfeld. In der ersten Zeile und der ersten Spalte
 	 * werden die Koordinaten 1 - 9 und A - I dargestellt. Die dargestellten
@@ -300,8 +299,8 @@ public class GameMaster {
 		SudokuChecker check = new SudokuChecker();
 		System.out.println();
 		System.out.println(
-				"Welche Zelle möchtest du befüllen? Bitte gib deine Wahl in der Form 'A3 3' (Koordinate + Leerzeichen + dein Wert) ein.\n" +
-				"Sonst kannst du mit '1' ins Hauptmenü zurückkehren und mit '2' das Spiel beenden");
+				"Welche Zelle möchtest du befüllen? Bitte gib deine Wahl in der Form 'A3 3' (Koordinate + Leerzeichen + dein Wert) ein.\n"
+						+ "Sonst kannst du mit '1' ins Hauptmenü zurückkehren und mit '2' das Spiel beenden");
 		// Eingabe auslesen und Zeilenkoordinate zu Kleinbuchstaben
 		String completeInput = playerCoordinate.nextLine().toLowerCase();
 		// System.out.println(completeInput);
@@ -316,82 +315,89 @@ public class GameMaster {
 				exit();
 				break;
 			default:
-				
-			if (completeInput.length() < 4) {
-				System.out.println(
-						"Deine Eingabe war leider zu kurz. Keep in mind: Koordinate (z.B. A3) + Leerzeichen + dein Wert (z.B. 6)");
-				playerEingabe(sudokuCells);
-			} else if (completeInput.equalsIgnoreCase("Lösen")) {
-				solveOwnSudoku();
-			} else if (completeInput.length() > 4) {
-				System.out.println("Deine Eingabe war leider zu lang. Vielleicht eine Zahl zu viel?");
-				playerEingabe(sudokuCells);
-			} else if (completeInput.charAt(2) != ' ') {
-				System.out.println("Deine Eingabe hatte kein Leerzeichen zwischen Koordinate und Wert...Nochmal?");
-				playerEingabe(sudokuCells);
-			} else {
 
-				// Input in ein Array splitten, um beide Teile weiter bearbeiten
-				// zu
-				// können und als Strings speichern
-				String input[] = completeInput.split("\\s+");
-				String coorInput = input[0];
-				String temp = input[1];
-				// Den eingegebenen Wert zur Zellenfüllung aus String lesen und
-				// auf
-				// formelle Korrektheit prüfen
-				int playerValue = Integer.parseInt(temp);
-				if (playerValue < 0 || playerValue > 9) {
-					System.out.println("Deine Eingabe war leider fehlerhaft.\n"
-							+ "Der Wert, den du für die Zelle setzen möchtest, sollte die Zahlen 1-9 abdecken.");
+				if (completeInput.length() < 4) {
+					System.out.println(
+							"Deine Eingabe war leider zu kurz. Keep in mind: Koordinate (z.B. A3) + Leerzeichen + dein Wert (z.B. 6)");
+					playerEingabe(sudokuCells);
+				} else if (completeInput.equalsIgnoreCase("Lösen")) {
+					solveOwnSudoku();
+				} else if (completeInput.length() > 4) {
+					System.out.println("Deine Eingabe war leider zu lang. Vielleicht eine Zahl zu viel?");
+					playerEingabe(sudokuCells);
+				} else if (completeInput.charAt(2) != ' ') {
+					System.out.println("Deine Eingabe hatte kein Leerzeichen zwischen Koordinate und Wert...Nochmal?");
 					playerEingabe(sudokuCells);
 				} else {
 
-					// Den Buchstaben (Zeilenbezeichnung) an erster Stelle der
-					// Eingabe auslesen
-					// Buchstaben in jeweiliges ASCII-Äquivalent umwandeln (a = 97,
-					// b = 98...), als int speichern und
-					// auf formelle Korrektheit prüfen
-					int chosenRow = (int) coorInput.charAt(0) - 97;
-					if (chosenRow < 0 || chosenRow > 8) {
-						System.out.println("Deine Zeilekoordinate hat leider nicht gepasst. Bitte wähle Zeile A-I!");
+					// Input in ein Array splitten, um beide Teile weiter
+					// bearbeiten
+					// zu
+					// können und als Strings speichern
+					String input[] = completeInput.split("\\s+");
+					String coorInput = input[0];
+					String temp = input[1];
+					// Den eingegebenen Wert zur Zellenfüllung aus String lesen
+					// und
+					// auf
+					// formelle Korrektheit prüfen
+					int playerValue = Integer.parseInt(temp);
+					if (playerValue < 0 || playerValue > 9) {
+						System.out.println("Deine Eingabe war leider fehlerhaft.\n"
+								+ "Der Wert, den du für die Zelle setzen möchtest, sollte die Zahlen 1-9 abdecken.");
 						playerEingabe(sudokuCells);
 					} else {
 
-						// Liest aus der eingegebenen Koordinate den character
-						// an der zweiten
-						// Stelle, wandelt es in einen int um und speichert
-						// diesen.
-						// Ebenfalls wird auf formelle Korrektheit geprüft
-						String numberOnly = coorInput.charAt(1) + "";
-						int chosenColumn = Integer.parseInt(numberOnly) - 1;
-						if (chosenColumn < 0 || chosenColumn > 8) {
-							System.out.println(
-									"Deine Spaltenkoordinate hat leider nicht gepasst. Bitte wähle Spalte 1-9!");
+						// Den Buchstaben (Zeilenbezeichnung) an erster Stelle
+						// der
+						// Eingabe auslesen
+						// Buchstaben in jeweiliges ASCII-Äquivalent umwandeln
+						// (a = 97,
+						// b = 98...), als int speichern und
+						// auf formelle Korrektheit prüfen
+						int chosenRow = (int) coorInput.charAt(0) - 97;
+						if (chosenRow < 0 || chosenRow > 8) {
+							System.out
+									.println("Deine Zeilekoordinate hat leider nicht gepasst. Bitte wähle Zeile A-I!");
 							playerEingabe(sudokuCells);
 						} else {
-							if (check.valIsAllowed(sudokuCells, sudokuCells[chosenRow][chosenColumn], playerValue)
-									&& !sudokuCells[chosenRow][chosenColumn].isFixVal()) {
-								sudokuCells[chosenRow][chosenColumn].setValue(playerValue);
-								System.out.println("Wert " + playerValue + " in Reihe " + (chosenRow + 1)
-										+ " und Spalte " + (chosenColumn + 1) + " eingetragen.");
-								drawBoard();
-							} else if (playerValue == 0 && !sudokuCells[chosenRow][chosenColumn].isFixVal()) {
-								sudokuCells[chosenRow][chosenColumn].setValue(playerValue);
-								System.out.println("Wert " + playerValue + " in Reihe " + (chosenRow + 1)
-										+ " und Spalte " + (chosenColumn + 1) + " eingetragen.");
-								drawBoard();
-							} else {
+
+							// Liest aus der eingegebenen Koordinate den
+							// character
+							// an der zweiten
+							// Stelle, wandelt es in einen int um und speichert
+							// diesen.
+							// Ebenfalls wird auf formelle Korrektheit geprüft
+							String numberOnly = coorInput.charAt(1) + "";
+							int chosenColumn = Integer.parseInt(numberOnly) - 1;
+							if (chosenColumn < 0 || chosenColumn > 8) {
 								System.out.println(
-										"Leider ist dein gewünschter Wert hier nicht möglich. Versuche es nocheinmal!");
+										"Deine Spaltenkoordinate hat leider nicht gepasst. Bitte wähle Spalte 1-9!");
 								playerEingabe(sudokuCells);
+							} else {
+								if (check.valIsAllowed(sudokuCells, sudokuCells[chosenRow][chosenColumn], playerValue)
+										&& !sudokuCells[chosenRow][chosenColumn].isFixVal()) {
+									sudokuCells[chosenRow][chosenColumn].setValue(playerValue);
+									System.out.println("Wert " + playerValue + " in Reihe " + (chosenRow + 1)
+											+ " und Spalte " + (chosenColumn + 1) + " eingetragen.");
+									drawBoard();
+								} else if (playerValue == 0 && !sudokuCells[chosenRow][chosenColumn].isFixVal()) {
+									sudokuCells[chosenRow][chosenColumn].setValue(playerValue);
+									System.out.println("Wert " + playerValue + " in Reihe " + (chosenRow + 1)
+											+ " und Spalte " + (chosenColumn + 1) + " eingetragen.");
+									drawBoard();
+								} else {
+									System.out.println(
+											"Leider ist dein gewünschter Wert hier nicht möglich. Versuche es nocheinmal!");
+									playerEingabe(sudokuCells);
+								}
 							}
 						}
 					}
 				}
-			} break;
+				break;
+			}
 		}
-	}
 
 		catch (NumberFormatException ex) { // Falls der Spieler einen
 											// Buchstaben/String statt der
@@ -493,24 +499,28 @@ public class GameMaster {
 			break;
 		}
 	}
-	
+
 	private static void insertOwnSudoku() {
-		
+
 		drawBoard();
 		System.out.println("Gib ein, 'Lösen' löst");
 		playerEingabe(sudokuCells);
-		
+
 	}
-	
-	private static void solveOwnSudoku(){
-//		SudokuSolver solve = new SudokuSolver();
-//		for (int i = 0; i <= 8; i++) {
-//			for (int j = 0; i <= 8; i++){
-//				while (sudokuCells[i][j].getValue() != 0){
-//					insertFixVal(sudokuCells, i, j, value);
-//				}
-//			}
-//		}solve.solveSudoku(sudokuCells, firstEmptyCell(sudokuCells[0][0]));
+
+	private static void solveOwnSudoku() {
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				if (sudokuCells[i][j].getValue() != 0) {
+					insertFixVal(sudokuCells, j, i, sudokuCells[i][j].getValue());
+				}
+			}
+		}
+		solve.resetLinkedList(sudokuCells);
+		solve.solveSudoku(sudokuCells, firstEmptyCell(sudokuCells[0][0]));
+		drawBoard();
+		System.out.println("Bidde: dat isset!");
+		hauptmenu();
 	}
 
 	/**

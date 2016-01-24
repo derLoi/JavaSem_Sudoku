@@ -78,22 +78,22 @@ public class SudokuSolver {
 			steps++;
 		}
 		// Nutzer-Feedback: wie schnell konnte das Sudoku gelöst werden
-		System.out.println("Solved: it took me " + steps + " iterations to generate this sudoku for you!");
+		System.out.println("Solved: it took me " + steps + " iterations to solve this sudoku puzzle for you!");
 		Cells lastCell = sudokuCells[8][8];
-		for (int i = 0; i < 9; i++){
-			for (int j = 0; j < 9; j++){
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
 				currentCell = sudokuCells[i][j];
 				if (!currentCell.excVal.isEmpty())
 					currentCell.excVal.clear();
 				currentCell.setFixVal(false);
 				currentCell.setLastCell(lastCell);
-				currentCell.getLastCell().setNextCell(currentCell);	
+				currentCell.getLastCell().setNextCell(currentCell);
 			}
 		}
 		currentCell.setNextCell(sudokuCells[0][0]);
 	}
-	
-	public void digHoles(Cells[][] sudokuCells, int min, int max){
+
+	public void digHoles(Cells[][] sudokuCells, int min, int max) {
 		Random rnd = new Random();
 		int rndY;
 		int rndX;
@@ -101,26 +101,55 @@ public class SudokuSolver {
 		// Anzahl Zellen, die ausgeschnitten werden
 		int rndNum = rnd.nextInt((max - min) + 1) + min;
 		// Zellen ausschneiden
-		while(rndNum > 0){
-			 rndY = rnd.nextInt(9);
-			 rndX = rnd.nextInt(9);
+		while (rndNum > 0) {
+			rndY = rnd.nextInt(9);
+			rndX = rnd.nextInt(9);
 			currentCell = sudokuCells[rndY][rndX];
-			if(currentCell.getValue() != 0){
+			if (currentCell.getValue() != 0) {
 				// Wert 0 = Zelle leer
 				currentCell.setValue(0);
 				// rndNum decrement
-				rndNum--;		
+				rndNum--;
 			}
 		}
-		for (int i = 0; i < 9; i++){
-			for (int j = 0; j < 9; j++){
+		resetLinkedList(sudokuCells);
+	}
+
+	public void resetLinkedList(Cells[][] sudokuCells) {
+		Cells lastCell;
+		Cells currentCell;
+		/* Linked List zurücksetzen */
+		// speichere letzte Zelle als erste "letzte Zelle"
+		lastCell = sudokuCells[8][8];
+		// Schleife durch das Sudoku Spielfeld Array
+		for (int i = 0; i <= 8; i++) {
+			for (int j = 0; j <= 8; j++) {
+				/*
+				 * erzeuge die Linked List indem die letzte Zelle mit der
+				 * betrachteten Zelle verbunden werden
+				 */
 				currentCell = sudokuCells[i][j];
-				if (currentCell.getValue() > 0){
+				currentCell.setLastCell(lastCell);
+				lastCell.setNextCell(currentCell);
+				// speichere die betrachtete Zelle als neue letzte Zelle
+				lastCell = currentCell;
+			}
+		}
+		// verknüpfe die letzte Zelle mit der ersten Zelle
+		sudokuCells[8][8].setNextCell(sudokuCells[0][0]);
+
+		/* Linked List neu verknüpfen */
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				currentCell = sudokuCells[i][j];
+				if (currentCell.getValue() != 0) {
 					// Wert ist Startwert = fix
 					currentCell.setFixVal(true);
 					// Linked List anpassen
 					currentCell.getLastCell().setNextCell(currentCell.getNextCell());
-					currentCell.getNextCell().setLastCell(currentCell.getLastCell());	
+					currentCell.getNextCell().setLastCell(currentCell.getLastCell());
+				} else if (currentCell.getValue() == 0) {
+					currentCell.setFixVal(false);
 				}
 			}
 		}
