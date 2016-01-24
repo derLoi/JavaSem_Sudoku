@@ -32,7 +32,7 @@ public class GameMaster {
 
 	public static void main(String[] args) {
 		System.out.println("\nWillkommen bei Sudokufy - von LTML \n\n");
-		mainmenu();
+		mainMenu();
 		drawBoard();
 		while (!check.sudokuIsSolved(sudokuCells)) {
 			playerInput(sudokuCells);
@@ -40,7 +40,7 @@ public class GameMaster {
 		System.out.println("Sehr gut, Sudoku gelöst!");
 	}
 
-	public static void mainmenu() {
+	public static void mainMenu() {
 		SudokuSolver solve = new SudokuSolver();
 		int inpInt;
 		String inpString;
@@ -80,7 +80,7 @@ public class GameMaster {
 				break;
 			default:
 				System.err.println("Ungültige Eingabe. Bitte wähle eine der vier Optionen.");
-				mainmenu();
+				mainMenu();
 				break;
 			}
 			System.out.println();
@@ -89,7 +89,7 @@ public class GameMaster {
 			System.out.println();
 			System.err.println("Ungültige Eingabe. Bitte wähle eine der oben genannten Optionen.");
 			System.out.println();
-			mainmenu();
+			mainMenu();
 		}
 	}
 
@@ -288,7 +288,6 @@ public class GameMaster {
 						+ "Mit '1' kannst du das Spiel jederzeit beenden");
 		// Eingabe auslesen und Zeilenkoordinate zu Kleinbuchstaben
 		String completeInput = playerCoordinate.nextLine().toLowerCase();
-		// System.out.println(completeInput);
 
 		// Falls der Spieler einen Buchstaben/String statt der Zahl/Int eingibt
 		try {
@@ -456,7 +455,7 @@ public class GameMaster {
 			inpString = null;
 			switch (inpInt) {
 			case 1:
-				mainmenu();
+				mainMenu();
 				break;
 			case 2:
 				scanner.close();
