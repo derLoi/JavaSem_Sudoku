@@ -76,6 +76,10 @@ public class SudokuSolver {
 			}
 			// incrementiere die Zählvariable
 			steps++;
+			if (steps > 10000000){
+				System.out.println("Nä! Dat dauert mir zulang. Verfatz disch!");
+				break;
+			}
 		}
 		// Nutzer-Feedback: wie schnell konnte das Sudoku gelöst werden
 		System.out.println("Solved: it took me " + steps + " iterations to solve this sudoku puzzle for you!");

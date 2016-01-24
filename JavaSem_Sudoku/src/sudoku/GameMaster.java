@@ -110,23 +110,7 @@ public class GameMaster {
 				sudokuCells[i][j] = new Cells(j, i);
 			}
 		}
-		// speichere letzte Zelle als erste "letzte Zelle"
-		lastCell = sudokuCells[8][8];
-		// Schleife durch das Sudoku Spielfeld Array
-		for (int i = 0; i <= 8; i++) {
-			for (int j = 0; j <= 8; j++) {
-				/*
-				 * erzeuge die Linked List indem die letzte Zelle mit der
-				 * betrachteten Zelle verbunden werden
-				 */
-				sudokuCells[i][j].setLastCell(lastCell);
-				lastCell.setNextCell(sudokuCells[i][j]);
-				// speichere die betrachtete Zelle als neue letzte Zelle
-				lastCell = sudokuCells[i][j];
-			}
-		}
-		// verknüpfe die letzte Zelle mit der ersten Zelle
-		sudokuCells[8][8].setNextCell(sudokuCells[0][0]);
+		solve.resetLinkedList(sudokuCells);
 	}
 
 	/**
@@ -412,7 +396,7 @@ public class GameMaster {
 		String inpString;
 
 		System.out.println("\nAlles klar, ein neues Spiel! \n \n" + "Bitte wähle deine Schwierigkeitsstufe: \n"
-				+ "1. Sehr leicht \n" + "2. Leicht \n" + "3. Mittel \n" + "4. Schwer \n" + "5. Schwer des Todes");
+				+ "1. Sehr leicht \n" + "2. Leicht \n" + "3. Mittel \n" + "4. Schwer");
 
 		Scanner scanner = new Scanner(System.in);
 		SudokuSolver solve = new SudokuSolver();
@@ -444,12 +428,6 @@ public class GameMaster {
 			maxBlankCells = 54;
 			solve.digHoles(sudokuCells, minBlankCells, maxBlankCells);
 			System.out.println("Ein schweres Sudoku wird gestartet");
-			break;
-		case 5:
-			minBlankCells = 55;
-			maxBlankCells = 59;
-			solve.digHoles(sudokuCells, minBlankCells, maxBlankCells);
-			System.out.println("Ein sehr schweres Sudoku wird gestartet");
 			break;
 		default:
 			System.out.println("Ungültige Eingabe. Bitte wähle eine der fünf Optionen.");
@@ -520,7 +498,7 @@ public class GameMaster {
 		solve.solveSudoku(sudokuCells, firstEmptyCell(sudokuCells[0][0]));
 		drawBoard();
 		System.out.println("Bidde: dat isset!");
-		hauptmenu();
+		exit();
 	}
 
 	/**
