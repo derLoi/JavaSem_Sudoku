@@ -109,7 +109,7 @@ public class SudokuSolver {
 				// Wert 0 = Zelle leer
 				currentCell.setValue(0);
 				// rndNum decrement
-				rndNum--;
+				rndNum--;		
 			}
 		}
 		for (int i = 0; i < 9; i++){

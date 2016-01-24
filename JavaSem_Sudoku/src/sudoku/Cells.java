@@ -178,7 +178,7 @@ public class Cells {
 	/**
 	 * Wählt aus der Liste der möglichen Werte (posVal) einen zufälligen Wert
 	 * und speichert diesen als neuen Lösungswert der Zelle. Ist die Liste der
-	 * möglichen Werte leer, wird einen 0 als Lösungswert gespeichert.
+	 * möglichen Werte leer, wird eine 0 als Lösungswert gespeichert.
 	 */
 	public void pickValueFromList() {
 		// Random Object erstellen

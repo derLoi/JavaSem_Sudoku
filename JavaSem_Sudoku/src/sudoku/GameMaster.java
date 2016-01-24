@@ -29,11 +29,10 @@ public class GameMaster {
 	private static int maxBlankCells;
 
 	public static void main(String[] args) {
-		SudokuSolver solve = new SudokuSolver();
 		SudokuChecker check = new SudokuChecker();
 		genSudoku();
-		fillRndVal();
-		solve.solveSudoku(sudokuCells, firstEmptyCell(sudokuCells[0][0]));
+//		fillRndVal();
+//		solve.solveSudoku(sudokuCells, firstEmptyCell(sudokuCells[0][0]));
 		hauptmenu();
 		drawBoard();
 		while (!check.sudokuIsSolved(sudokuCells)) {
@@ -43,6 +42,7 @@ public class GameMaster {
 	}
 
 	public static void hauptmenu() {
+		SudokuSolver solve = new SudokuSolver();
 		int inpInt;
 		String inpString;
 		System.out.println("\nWillkommen bei Sudokufy - von LTML \n\n"
@@ -63,6 +63,8 @@ public class GameMaster {
 
 		switch (inpInt) {
 		case 1:
+			fillRndVal();
+			solve.solveSudoku(sudokuCells, firstEmptyCell(sudokuCells[0][0]));
 			schwierigkeitsgrade();
 			break;
 		case 2:
@@ -319,6 +321,8 @@ public class GameMaster {
 				System.out.println(
 						"Deine Eingabe war leider zu kurz. Keep in mind: Koordinate (z.B. A3) + Leerzeichen + dein Wert (z.B. 6)");
 				playerEingabe(sudokuCells);
+			} else if (completeInput.equalsIgnoreCase("Lösen")) {
+				solveOwnSudoku();
 			} else if (completeInput.length() > 4) {
 				System.out.println("Deine Eingabe war leider zu lang. Vielleicht eine Zahl zu viel?");
 				playerEingabe(sudokuCells);
@@ -491,7 +495,22 @@ public class GameMaster {
 	}
 	
 	private static void insertOwnSudoku() {
+		
 		drawBoard();
+		System.out.println("Gib ein, 'Lösen' löst");
+		playerEingabe(sudokuCells);
+		
+	}
+	
+	private static void solveOwnSudoku(){
+//		SudokuSolver solve = new SudokuSolver();
+//		for (int i = 0; i <= 8; i++) {
+//			for (int j = 0; i <= 8; i++){
+//				while (sudokuCells[i][j].getValue() != 0){
+//					insertFixVal(sudokuCells, i, j, value);
+//				}
+//			}
+//		}solve.solveSudoku(sudokuCells, firstEmptyCell(sudokuCells[0][0]));
 	}
 
 	/**
