@@ -82,7 +82,7 @@ public class SudokuSolver {
 			}
 		}
 		// Nutzer-Feedback: wie schnell konnte das Sudoku gelöst werden
-		System.out.println("Solved: it took me " + steps + " iterations to solve this sudoku puzzle for you!");
+		// System.out.println("Solved: it took me " + steps + " iterations to solve this sudoku puzzle for you!");
 		Cells lastCell = sudokuCells[8][8];
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
