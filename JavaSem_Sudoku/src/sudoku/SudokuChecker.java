@@ -3,6 +3,7 @@ package sudoku;
 import java.util.Arrays;
 
 public class SudokuChecker {
+	
 	/**
 	 * Gibt die Reihe der Lösungswerte als Array zurück, in der die Zelle liegt.
 	 * 

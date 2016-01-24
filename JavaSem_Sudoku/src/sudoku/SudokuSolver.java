@@ -76,7 +76,7 @@ public class SudokuSolver {
 			}
 			// incrementiere die Zählvariable
 			steps++;
-			if (steps > 10000000){
+			if (steps > 10000000) {
 				System.out.println("Nä! Dat dauert mir zulang. Verfatz disch!");
 				break;
 			}
@@ -122,8 +122,10 @@ public class SudokuSolver {
 	public void resetLinkedList(Cells[][] sudokuCells) {
 		Cells lastCell;
 		Cells currentCell;
-		/* Linked List zurücksetzen */
-		// speichere letzte Zelle als erste "letzte Zelle"
+		/*
+		 * Linked List zurücksetzen. Speichere letzte Zelle als erste
+		 * "letzte Zelle"
+		 */
 		lastCell = sudokuCells[8][8];
 		// Schleife durch das Sudoku Spielfeld Array
 		for (int i = 0; i <= 8; i++) {
