@@ -2,7 +2,6 @@ package sudoku;
 
 import java.util.Random;
 import java.util.Scanner;
-import java.util.InputMismatchException;
 
 /**
  * kontrolliert den Spielablauf.
