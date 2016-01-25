@@ -1,11 +1,11 @@
 package sudoku;
 
-import java.util.*;
+import java.util.Random;
 
 /**
  * Löst ein gegebenes Sudoku mit Hilfe eines Backtracking Algorithmus.
  * 
- * @version 17/01/2016
+ * @version 24/01/2016
  */
 public class SudokuSolver {
 	// SudokuChecker Object initialisieren
@@ -82,18 +82,6 @@ public class SudokuSolver {
 			}
 		}
 		resetLinkedList(sudokuCells, true);
-//		Cells lastCell = sudokuCells[8][8];
-//		for (int i = 0; i < 9; i++) {
-//			for (int j = 0; j < 9; j++) {
-//				currentCell = sudokuCells[i][j];
-//				if (!currentCell.excVal.isEmpty())
-//					currentCell.excVal.clear();
-//				currentCell.setFixVal(false);
-//				currentCell.setLastCell(lastCell);
-//				currentCell.getLastCell().setNextCell(currentCell);
-//			}
-//		}
-//		currentCell.setNextCell(sudokuCells[0][0]);
 	}
 
 	/**
@@ -172,7 +160,7 @@ public class SudokuSolver {
 				for (int j = 0; j < 9; j++) {
 					currentCell = sudokuCells[i][j];
 					// Prüfe ob Liste excVal leer ist
-					if (!currentCell.excVal.isEmpty()){
+					if (!currentCell.excVal.isEmpty()) {
 						// lösche Liste excVal
 						currentCell.excVal.clear();
 					}

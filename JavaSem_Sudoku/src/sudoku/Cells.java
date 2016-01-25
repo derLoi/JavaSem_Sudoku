@@ -9,8 +9,6 @@ import java.util.Random;
  * Sudokus gehören und stellt Funktionen zur Manipulation der Inhalte bereit.
  * 
  * @version 16/01/2016
- * <br>LS: Methoden setFixVal(), pickValueFromList(), listToArray() und
- *             remValVromPosVals() hinzugefügt
  */
 public class Cells {
 	// Lösungswert der Zelle, 0 für leere Zellen
@@ -117,7 +115,8 @@ public class Cells {
 	/**
 	 * Speichert eine neue Y-Koordinate der Zelle.
 	 * 
-	 * @param y die neue Y-Koordinate.
+	 * @param y
+	 *            die neue Y-Koordinate.
 	 */
 	public void setY(int y) {
 		this.y = y;

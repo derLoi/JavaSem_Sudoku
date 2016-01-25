@@ -6,19 +6,7 @@ import java.util.Scanner;
 /**
  * kontrolliert den Spielablauf.
  * 
- * @version: 19/01/2016 <br>
- * @changelog <br>
- *            <ul>
- *            <li>MW: Abfrage der Schwierigkeitsstufe eingebaut</li>
- *            <li>TM: Überarbeitungen der Spielfeldanzeige</li>
- *            <li>LS: Test mit Gültigkeitsprüfung für zufällig generiertes
- *            Sudoku. Ausgabe Ergebnisse</li>
- *            <li>LS: Methoden fillRndVal(), insertFixVal() und firstEmptyCell()
- *            hinzugefügt</li>
- *            <li>MW: Interaktive Spielereingabe während des Spiels eingebaut
- *            </li>
- *            <li>TM: Menü und exception handling eingebaut</li>
- *            </ul>
+ * @version: 24/01/2016 <br>
  */
 
 public class GameMaster {
@@ -76,7 +64,7 @@ public class GameMaster {
 			// Sudoku generieren durch Löcher graben
 			solve.digHoles(sudokuCells, minBlankCells, maxBlankCells);
 			// Ausgabe an Spieler
-			System.out.println("Okay dann los! \n");
+			System.out.println("Okay, dann los! \n");
 			// Ausgabe Sudoku Spielfeld
 			drawBoard();
 			// Prüfe ob Sudoku gelöst wurde
@@ -293,7 +281,8 @@ public class GameMaster {
 				} else {
 					/*
 					 * Input in ein Array splitten, um beide Teile weiter
-					 * bearbeiten zu können und als Strings speichern
+					 * bearbeiten zu können und als Strings speichern.
+					 * \\s+ regex für Whitespace (regular expression)
 					 */
 					String input[] = completeInput.split("\\s+");
 					/*
