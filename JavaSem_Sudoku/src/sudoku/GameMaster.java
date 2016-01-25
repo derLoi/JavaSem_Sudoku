@@ -24,70 +24,107 @@ import java.util.Scanner;
 public class GameMaster {
 	// Array, in dem alle Zellen-Objects des Sudokus gespeichert werden
 	private static Cells[][] sudokuCells = new Cells[9][9];
+	/*
+	 * Untere und obere Grenze der leeren Zellen, abhängig von
+	 * Schwierigkeitsgrad
+	 */
 	private static int minBlankCells;
 	private static int maxBlankCells;
+	// Objects für Prüfen, Lösen und Eingabe initialisieren
 	private static SudokuChecker check = new SudokuChecker();
 	private static SudokuSolver solve = new SudokuSolver();
 	private static Scanner scanner = new Scanner(System.in);
 
+	/**
+	 * Die Main Methode steuert den Spielablauf dieses Sudokuspiels.
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
+		// Nutzerauswahl im Hauptmenü
 		int usrChoice;
-
+		// Willkommensnachricht an Spieler
 		System.out.println("\nWillkommen bei Sudokufy - von LTML");
-
+		/*
+		 * Aufruf des Hauptmenüs. Wiederholung in do-while-Schleife bis Spieler
+		 * eine Option 1 - 4 wählt. Wird die Spielerklärung (3) aufgerufen und
+		 * kehrt der Spieler darauf hin ins Hauptmenü zurück, wird usrChoice
+		 * manuell zurückgesetzt.
+		 */
 		do {
 			usrChoice = mainMenu();
-			if (usrChoice == 3){
+			// Spieler wählt Erklärung
+			if (usrChoice == 3) {
 				explanation();
+				// zurücksetzen um erneuten Loop zu erzwingen
 				usrChoice = 0;
 			}
 		} while (usrChoice == 0);
-
+		// Spielablauf abhängig von der Auswahl des Spielers steuern.
 		switch (usrChoice) {
-		case 1:
+		case 1: // Sudoku generieren und lösen
+			// leeres Sudoku Spielfeld generieren
 			genSudoku();
+			// Zufällige Werte in erster Zeile einfügen
 			fillRndVal();
+			// Lösungsalgorithmus "löst" Sudoku
 			solve.solveSudoku(sudokuCells, firstEmptyCell(sudokuCells[0][0]));
-			System.out.println("\n" + "Alles klar! Ein neues Spiel beginnt: \n");
+			// Ausgabe an Spieler
+			System.out.println("\nAlles klar! Ein neues Spiel beginnt: \n");
+			// Spieler wählt Schwierigkeitsgrad
 			difficultyLevel();
+			// Sudoku generieren durch Löcher graben
 			solve.digHoles(sudokuCells, minBlankCells, maxBlankCells);
+			// Ausgabe an Spieler
 			System.out.println("Okay dann los! \n");
+			// Ausgabe Sudoku Spielfeld
 			drawBoard();
+			// Prüfe ob Sudoku gelöst wurde
 			while (!check.sudokuIsSolved(sudokuCells)) {
+				// Spieler gibt Werte ein
 				playerInput(sudokuCells);
 			}
+			// Erfolgsmeldung an Spieler
 			System.out.println("Sehr gut, Sudoku gelöst!");
 			break;
-		case 2:
+		case 2: // Eigenes Sudoku eingeben und lösen lassen
+			// leeres Sudoku Spielfeld generieren
 			genSudoku();
+			// Ausgabe an Spieler
 			System.out.println("Gib jetzt bitte dein Sudoku ein:");
+			// Ausgabe Sudoku Spielfeld
 			drawBoard();
+			// Prüfe ob Sudoku gelöst wurde
 			while (!check.sudokuIsSolved(sudokuCells)) {
+				// Spieler gibt Werte ein
 				playerInput(sudokuCells);
 			}
 			break;
-		case 4:
+		case 4: // Sudokufy beenden
 			exit();
 			break;
 		}
 	}
 
+	/**
+	 * Die Methode mainMenu stellt ein Hauptmenü für den Spieler dar und
+	 * empfängt dessen Auswahl. Evtl. Fehler in der Eingabe werden durch default
+	 * oder try/catch abgefangen.
+	 * 
+	 * @return die Auswahl des Spielers
+	 */
 	private static int mainMenu() {
+		// Spieler Eingabe
 		int intInp;
-		System.out.println("\n"+"Bitte wähle eine der folgenden Optionen indem du die entsprechende Zahl eingibst: \n"
+		// Ausgabe Hauptmenü mit Optionen 1 - 4
+		System.out.println("\nBitte wähle eine der folgenden Optionen indem du die entsprechende Zahl eingibst: \n"
 				+ "1. Sudoku spielen \n" + "2. Sudoku lösen lassen \n" + "3. Wie spielt man Sudoku? \n"
 				+ "4. Sudokufy beenden");
-
-		// Exception für Eingabe von Buchstaben/Strings schmeißen
+		// Exception handling für Eingabe von Buchstaben/Strings
 		try {
-			/*
-			 * nextInt() bewirkt keinen Zeilenumbruch, sodass der Scanner immer
-			 * noch in derselben Zeile bleibt. Deswegen nextLine(), um input
-			 * skipping zu verhindern
-			 */
+			// Scanner liest nächste Zeile, parse von String zu int
 			intInp = Integer.parseInt(scanner.nextLine());
-			System.out.println(intInp);
-
+			// Rückgabe in Abhängigkeit von Spieler Eingabe
 			switch (intInp) {
 			case 1:
 				return 1;
@@ -98,23 +135,35 @@ public class GameMaster {
 			case 4:
 				return 4;
 			default:
-				System.err.println("Ungültige Eingabe. Bitte wähle eine der vier Optionen.");
+				// Mitteilung fehlerhafte Eingabe
+				System.err.println("\nUngültige Eingabe. Bitte wähle eine der vier Optionen.");
 			}
 		} catch (NumberFormatException e) {
-			System.out.println();
-			System.err.println("Ungültige Eingabe. Bitte wähle eine der oben genannten Optionen.");
+			// Mitteilung fehlerhafte Eingabe
+			System.err.println("\nUngültige Eingabe. Bitte wähle eine der oben genannten Optionen.");
 		}
 		return 0;
 	}
 
+	/**
+	 * Die Methode difficultyLevel stellt ein Menü zur Auswahl des
+	 * Schwierigkeitsgrades zwischen sehr leicht und schwer dar. Evtl. Fehler in
+	 * der Eingabe werden durch default oder try/catch abgefangen.
+	 */
 	private static void difficultyLevel() {
+		// Spieler Eingabe
 		int intInp;
+		// Ausgabe Schwierigkeitsgrade mit Option 1 - 4
 		System.out.println("Bitte wähle deine Schwierigkeitsstufe: \n" + "1. Sehr leicht \n" + "2. Leicht \n"
 				+ "3. Mittel \n" + "4. Schwer");
-
+		// Exception handling für Eingabe von Buchstaben/Strings
 		try {
+			// Scanner liest nächste Zeile, parse von String zu int
 			intInp = Integer.parseInt(scanner.nextLine());
-			System.out.println(intInp);
+			/*
+			 * Untere und obere Grenze der leeren Zellen in Abhängigkeit der
+			 * Spieler Auswahl
+			 */
 			switch (intInp) {
 			case 1:
 				minBlankCells = 28;
@@ -137,18 +186,28 @@ public class GameMaster {
 				System.out.println("Ein schweres Sudoku wird gestartet.");
 				break;
 			default:
+				// Mitteilung fehlerhafte Eingabe
 				System.err.println("Ungültige Eingabe. Bitte wähle eine der vier Optionen.");
+				// Neustart der Auswahl des Schwierigkeitsgrades
 				difficultyLevel();
 				break;
 			}
 		} catch (NumberFormatException e) {
+			// Mitteilung fehlerhafte Eingabe
 			System.err.println("Ungültige Eingabe. Bitte gib eine Zahl ein.\n");
+			// Neustart der Auswahl des Schwierigkeitsgrades
 			difficultyLevel();
 		}
 	}
 
+	/**
+	 * Die Methode explanation gibt dem Spieler eine kurze Erklärung der Regeln
+	 * eines Sudoku Puzzles und beschreibt die Auswahlmöglichkeit im Hauptmenü.
+	 */
 	private static void explanation() {
+		// Spieler Eingabe
 		int intInp;
+		// Ausgabe der Erklärungen
 		System.out.println("\nErklärung des Spiels und des Hauptmenüs: \n\n"
 				+ "Ein Sudoku besteht aus 9x9 Feldern, die zusätzlich in 3x3 Blöcken \n"
 				+ "mit je 3x3 Feldern aufgeteilt sind. Jede Zeile, jede Spalte und \n"
@@ -161,27 +220,32 @@ public class GameMaster {
 				+ "als auch von der Position der angegebenen Zahlen abhängen. \n\n" + "Im Hauptmenü kannst du: \n"
 				+ "1. Dir ein neues, ganz persönliches Sudoku generieren lassen und es lösen \n"
 				+ "2. Die vorgegebenen Zahlen eines Sudokus eingeben, um es von Sudokufy lösen zu lassen \n"
-				+ "3. Diese Erklärung nochmals aufrufen \n"
-				+ "4. Dieses Spiel beenden \n\n"
+				+ "3. Diese Erklärung nochmals aufrufen \n" + "4. Dieses Spiel beenden \n\n"
 				+ "Bitte wähle nun eine der folgenden beiden Optionen: \n" + "1. Zurück ins Hauptmenü \n"
 				+ "2. Sudokufy beenden.");
-
+		// Exception handling für Eingabe von Buchstaben/Strings
 		try {
+			// Scanner liest nächste Zeile, parse von String zu int
 			intInp = Integer.parseInt(scanner.nextLine());
-			System.out.println(intInp);
+			// Auswahl in Abhängigkeit von Spieler Eingabe
 			switch (intInp) {
 			case 1:
 				break;
 			case 2:
+				// Sudokufy beenden
 				exit();
 				break;
 			default:
+				// Mitteilung fehlerhafte Eingabe
 				System.err.println("Ungültige Eingabe. Bitte wähle eine der beiden Optionen.\n");
+				// Neustart der Erklärung
 				explanation();
 				break;
 			}
 		} catch (NumberFormatException e) {
+			// Mitteilung fehlerhafte Eingabe
 			System.err.println("Ungültige Eingabe. Bitte wähle eine der beiden Optionen.\n");
+			// Neustart der Erklärung
 			explanation();
 		}
 	}
@@ -191,33 +255,40 @@ public class GameMaster {
 	 * gezielte Hinweise bei falscher Eingabe
 	 */
 	private static void playerInput(Cells[][] sudokuCells) {
-		SudokuChecker check = new SudokuChecker();
-		System.out.println();
+		// Anweisungen für Spieler
 		System.out.println(
-				"Welche Zelle möchtest du befüllen? Bitte gib deine Wahl in der Form 'A3 3' (Koordinate + Leerzeichen + deinen Wert) ein.\n"
+				"\n" + "Welche Zelle möchtest du befüllen? Bitte gib deine Wahl in der Form 'A3 3' (Koordinate + Leerzeichen + deinen Wert) ein.\n"
 						+ "Mit '1' kannst du das Spiel jederzeit beenden");
-		// Eingabe auslesen und Zeilenkoordinate zu Kleinbuchstaben
+		// Eingabe auslesen, Konvertierung zu Kleinbuchstaben
 		String completeInput = scanner.nextLine().toLowerCase();
-
-		// Falls der Spieler einen Buchstaben/String statt der Zahl/Int eingibt
+		// Exception handling für Eingabe von Buchstaben/Strings
 		try {
 			// Fehler in der Eingabe'form' (Länge, Leerzeichen) behandeln
 			switch (completeInput) {
 			case "1":
+				// Sudokufy beenden
 				exit();
 				break;
 			default:
+				// Zu kurze Eingabe abfangen
 				if (completeInput.length() < 4) {
+					// Mitteilung fehlerhafte Eingabe
 					System.err.println(
 							"Deine Eingabe war leider zu kurz. Keep in mind: Koordinate (z.B. A3) + Leerzeichen + dein Wert (z.B. 6)");
+					// Spieler Eingabe neu starten
 					playerInput(sudokuCells);
 				} else if (completeInput.equalsIgnoreCase("Lösen")) {
+					// Lösung des Sudokus berechnen
 					solveOwnSudoku();
 				} else if (completeInput.length() > 4) {
+					// Mitteilung fehlerhafte Eingabe
 					System.err.println("Deine Eingabe war leider zu lang. Vielleicht eine Zahl zu viel?");
+					// Spieler Eingabe neu starten
 					playerInput(sudokuCells);
 				} else if (completeInput.charAt(2) != ' ') {
+					// Mitteilung fehlerhafte Eingabe
 					System.err.println("Deine Eingabe hatte kein Leerzeichen zwischen Koordinate und Wert...Nochmal?");
+					// Spieler Eingabe neu starten
 					playerInput(sudokuCells);
 				} else {
 					/*
@@ -225,16 +296,17 @@ public class GameMaster {
 					 * bearbeiten zu können und als Strings speichern
 					 */
 					String input[] = completeInput.split("\\s+");
-					String coorInput = input[0];
-					String temp = input[1];
 					/*
 					 * Den eingegebenen Wert zur Zellenfüllung aus String lesen
 					 * und auf formelle Korrektheit prüfen
 					 */
-					int playerValue = Integer.parseInt(temp);
+					int playerValue = Integer.parseInt(input[1]);
+					// Prüfe ob die Zahl zwischen 1 - 9 ist
 					if (playerValue < 0 || playerValue > 9) {
+						// Mitteilung fehlerhafte Eingabe
 						System.err.println("Deine Eingabe war leider fehlerhaft.\n"
 								+ "Der Wert, den du für die Zelle setzen möchtest, sollte die Zahlen 1-9 abdecken.");
+						// Spieler Eingabe neu starten
 						playerInput(sudokuCells);
 					} else {
 						/*
@@ -243,10 +315,13 @@ public class GameMaster {
 						 * ASCII-Äquivalent umwandeln (a = 97, b = 98...), als
 						 * int speichern und auf formelle Korrektheit prüfen
 						 */
-						int chosenRow = (int) coorInput.charAt(0) - 97;
+						int chosenRow = (int) input[0].charAt(0) - 97;
+						// Prüfe ob Koordinate für Zeilen existiert
 						if (chosenRow < 0 || chosenRow > 8) {
+							// Mitteilung fehlerhafte Eingabe
 							System.err
 									.println("Deine Zeilekoordinate hat leider nicht gepasst. Bitte wähle Zeile A-I!");
+							// Spieler Eingabe neu starten
 							playerInput(sudokuCells);
 						} else {
 							/*
@@ -255,27 +330,49 @@ public class GameMaster {
 							 * einen int um und speichert diesen. Ebenfalls wird
 							 * auf formelle Korrektheit geprüft
 							 */
-							String numberOnly = coorInput.charAt(1) + "";
+							String numberOnly = input[0].charAt(1) + "";
+							// parse String zu int der x-Koordinate
 							int chosenColumn = Integer.parseInt(numberOnly) - 1;
+							// Prüfe ob Koordinate für Spalte existiert
 							if (chosenColumn < 0 || chosenColumn > 8) {
+								// Mitteilung fehlerhafte Eingabe
 								System.err.println(
 										"Deine Spaltenkoordinate hat leider nicht gepasst. Bitte wähle Spalte 1-9!");
+								// Spieler Eingabe neu starten
 								playerInput(sudokuCells);
 							} else {
+								// Prüfe Wert der Spieler Eingabe
 								if (check.valIsAllowed(sudokuCells, sudokuCells[chosenRow][chosenColumn], playerValue)
 										&& !sudokuCells[chosenRow][chosenColumn].isFixVal()) {
+									/*
+									 * Einzusetzender Wert ist nach aktuellem
+									 * Lösungsstand erlaubt und die ausgewählte
+									 * Zelle enthält keinen Startwert. Wert
+									 * speichern und Rückmeldung an Spieler,
+									 * dass Eingabe erfolgreich war.
+									 */
 									sudokuCells[chosenRow][chosenColumn].setValue(playerValue);
 									System.out.println("Wert " + playerValue + " in Reihe " + (chosenRow + 1)
 											+ " und Spalte " + (chosenColumn + 1) + " eingetragen.");
+									// Ausgabe Sudoku Spielfeld
 									drawBoard();
 								} else if (playerValue == 0 && !sudokuCells[chosenRow][chosenColumn].isFixVal()) {
+									/*
+									 * Spieler möchte Zelle löschen (Wert = 0)
+									 * und die Zelle enthält keinen Startwert.
+									 * Wert speichern und Rückmeldung an
+									 * Spieler, dass Eingabe erfolgreich war.
+									 */
 									sudokuCells[chosenRow][chosenColumn].setValue(playerValue);
 									System.out.println("Wert " + playerValue + " in Reihe " + (chosenRow + 1)
 											+ " und Spalte " + (chosenColumn + 1) + " eingetragen.");
+									// Ausgabe Sudoku Spielfeld
 									drawBoard();
 								} else {
+									// Mitteilung fehlerhafte Eingabe
 									System.err.println(
 											"Leider ist dein gewünschter Wert hier nicht möglich. Versuche es nocheinmal!");
+									// Spieler Eingabe neu starten
 									playerInput(sudokuCells);
 								}
 							}
@@ -285,7 +382,9 @@ public class GameMaster {
 				break;
 			}
 		} catch (NumberFormatException e) {
+			// Mitteilung fehlerhafte Eingabe
 			System.err.println("Leider ist dein gewünschter Wert hier nicht möglich. Versuche es nocheinmal!");
+			// Spieler Eingabe neu starten
 			playerInput(sudokuCells);
 		}
 	}
@@ -375,7 +474,8 @@ public class GameMaster {
 				sudokuCells[i][j] = new Cells(j, i);
 			}
 		}
-		solve.resetLinkedList(sudokuCells);
+		// Verknüpfe Linked List neu
+		solve.resetLinkedList(sudokuCells, false);
 	}
 
 	/**
@@ -469,22 +569,33 @@ public class GameMaster {
 		// Übergebe gefundene Zelle
 		return currentCell;
 	}
+
 	/**
-	 * Löst das Spieler-Sudoku, indem die eingegebenen Werte als fix gesetzt werden,
-	 * die Linked-List zurückgesetzt wird und der Algorithmus seine Arbeit macht.
+	 * Löst das Spieler-Sudoku, indem die eingegebenen Werte als fix gesetzt
+	 * werden, die Linked-List zurückgesetzt wird und der Algorithmus seine
+	 * Arbeit macht.
 	 */
 	private static void solveOwnSudoku() {
+		/*
+		 * Schleife durch das Sudoku und setze alle eingetragenen Werte als fix
+		 * ein.
+		 */
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
 				if (sudokuCells[i][j].getValue() != 0) {
+					// Ist Wert vorhanden, überschreibe als fixen Wert
 					insertFixVal(sudokuCells, j, i, sudokuCells[i][j].getValue());
 				}
 			}
 		}
-		solve.resetLinkedList(sudokuCells);
+		// Verknüpfe Linked List neu
+		solve.resetLinkedList(sudokuCells, false);
+		// Lösungsalgorithmus löst Sudoku
 		solve.solveSudoku(sudokuCells, firstEmptyCell(sudokuCells[0][0]));
+		// Ausgabe Sudoku Spielfeld
 		drawBoard();
-		System.out.println("Bidde: Dat isset!");
+		// Mitteilung an Spieler, dass Lösung gefunden wurde.
+		System.out.println("Dies ist die Lösung!");
 		exit();
 	}
 
@@ -492,7 +603,9 @@ public class GameMaster {
 	 * wann immer das Spiel beendet werden soll, reicht jetzt exit();
 	 */
 	private static void exit() {
+		// Abschiedsnachricht an Spieler
 		System.out.println("Schüss!");
+		// Beenden
 		System.exit(1);
 	}
 }

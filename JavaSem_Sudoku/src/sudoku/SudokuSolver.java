@@ -81,32 +81,32 @@ public class SudokuSolver {
 				break;
 			}
 		}
-		// Nutzer-Feedback: wie schnell konnte das Sudoku gelöst werden
-		// System.out.println("Gelöst: Es hat " + steps + " Schritte gebraucht, um das Sudoku zu lösen!");
-		Cells lastCell = sudokuCells[8][8];
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
-				currentCell = sudokuCells[i][j];
-				if (!currentCell.excVal.isEmpty())
-					currentCell.excVal.clear();
-				currentCell.setFixVal(false);
-				currentCell.setLastCell(lastCell);
-				currentCell.getLastCell().setNextCell(currentCell);
-			}
-		}
-		currentCell.setNextCell(sudokuCells[0][0]);
+		resetLinkedList(sudokuCells, true);
+//		Cells lastCell = sudokuCells[8][8];
+//		for (int i = 0; i < 9; i++) {
+//			for (int j = 0; j < 9; j++) {
+//				currentCell = sudokuCells[i][j];
+//				if (!currentCell.excVal.isEmpty())
+//					currentCell.excVal.clear();
+//				currentCell.setFixVal(false);
+//				currentCell.setLastCell(lastCell);
+//				currentCell.getLastCell().setNextCell(currentCell);
+//			}
+//		}
+//		currentCell.setNextCell(sudokuCells[0][0]);
 	}
+
 	/**
-	 * Methode 'gräbt Löcher' in das komplett gelöste Sudoku, die Anzahl
-	 * der freien Stellen wird zufällig, je nach Schwierigkeitslevel, bestimmt und
+	 * Methode 'gräbt Löcher' in das komplett gelöste Sudoku, die Anzahl der
+	 * freien Stellen wird zufällig, je nach Schwierigkeitslevel, bestimmt und
 	 * betroffene Stellen in eine 0 umgewandlt
-	 *  
+	 * 
 	 * @param sudokuCells
-	 * 			das Cells-Array des Sudoku Spielfelds.
+	 *            das Cells-Array des Sudoku Spielfelds.
 	 * @param min
-	 * 			minimalte Anzahl an freien Zellen im Sudoku 
+	 *            minimalte Anzahl an freien Zellen im Sudoku
 	 * @param max
-	 * 			maximalte Anzahl an freien Zellen im Sudoku
+	 *            maximalte Anzahl an freien Zellen im Sudoku
 	 */
 	public void digHoles(Cells[][] sudokuCells, int min, int max) {
 		Random rnd = new Random();
@@ -123,14 +123,25 @@ public class SudokuSolver {
 			if (currentCell.getValue() != 0) {
 				// Wert 0 = Zelle leer
 				currentCell.setValue(0);
-				// dekrementiere ndNum 
+				// dekrementiere ndNum
 				rndNum--;
 			}
 		}
-		resetLinkedList(sudokuCells);
+		// Verknüpfe Linked List neu
+		resetLinkedList(sudokuCells, false);
 	}
 
-	public void resetLinkedList(Cells[][] sudokuCells) {
+	/**
+	 * Die Methode resetLinkedList verknüpft die Linked List der Cells Objects
+	 * neu. Dazu werden zuerst alle Zellen als Kette verknüpft und dann durch
+	 * fixieren der Startwerte und beugen der Verlinkung eine Linked List aller
+	 * leeren Zellen erstellt.
+	 * 
+	 * @param sudokuCells
+	 *            ein zweidimensionale Cells Array
+	 */
+	public void resetLinkedList(Cells[][] sudokuCells, boolean param) {
+		// Cells Objects
 		Cells lastCell;
 		Cells currentCell;
 		/*
@@ -154,19 +165,35 @@ public class SudokuSolver {
 		}
 		// verknüpfe die letzte Zelle mit der ersten Zelle
 		sudokuCells[8][8].setNextCell(sudokuCells[0][0]);
-
-		/* Linked List neu verknüpfen */
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
-				currentCell = sudokuCells[i][j];
-				if (currentCell.getValue() != 0) {
-					// Wert ist Startwert = fix
-					currentCell.setFixVal(true);
-					// Linked List anpassen
-					currentCell.getLastCell().setNextCell(currentCell.getNextCell());
-					currentCell.getNextCell().setLastCell(currentCell.getLastCell());
-				} else if (currentCell.getValue() == 0) {
+		// Prüfe param
+		if (param) {
+			// Schleife durch das Sudoku Spielfeld Array
+			for (int i = 0; i < 9; i++) {
+				for (int j = 0; j < 9; j++) {
+					currentCell = sudokuCells[i][j];
+					// Prüfe ob Liste excVal leer ist
+					if (!currentCell.excVal.isEmpty()){
+						// lösche Liste excVal
+						currentCell.excVal.clear();
+					}
+					// Aktueller Wert kein Startwert
 					currentCell.setFixVal(false);
+				}
+			}
+		} else if (!param) {
+			// Linked List neu verknüpfen
+			for (int i = 0; i < 9; i++) {
+				for (int j = 0; j < 9; j++) {
+					currentCell = sudokuCells[i][j];
+					if (currentCell.getValue() != 0) {
+						// Wert ist Startwert = fix
+						currentCell.setFixVal(true);
+						// Linked List anpassen
+						currentCell.getLastCell().setNextCell(currentCell.getNextCell());
+						currentCell.getNextCell().setLastCell(currentCell.getLastCell());
+					} else if (currentCell.getValue() == 0) {
+						currentCell.setFixVal(false);
+					}
 				}
 			}
 		}

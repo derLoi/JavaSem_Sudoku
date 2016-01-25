@@ -3,15 +3,16 @@ package sudoku;
 import java.util.Arrays;
 
 /**
- * Diese Klasse enthält Methoden, die überprüfen ob Zahlen nach dem Sudokuregelwerk in
- * beliebigen Zellen erlaubt sind, welche möglich sind und ob das Sudoku bereits gelöst ist.
+ * Diese Klasse enthält Methoden, die überprüfen ob Zahlen nach dem
+ * Sudokuregelwerk in beliebigen Zellen erlaubt sind, welche möglich sind und ob
+ * das Sudoku bereits gelöst ist.
  * 
  * @version 25/01/16
  *
  */
 
 public class SudokuChecker {
-	
+
 	/**
 	 * Gibt die Reihe der Lösungswerte als Array zurück, in der die Zelle liegt.
 	 * 
@@ -107,7 +108,8 @@ public class SudokuChecker {
 	 */
 	public Boolean valIsAllowed(Cells[][] sudokuCells, Cells currentCell, int value) {
 		/*
-		 *  UND-Verkettung der Ergebnisse der Prüfung der Zeile/Reihe/Box und ausgeschlossenen Werte
+		 * UND-Verkettung der Ergebnisse der Prüfung der Zeile/Reihe/Box und
+		 * ausgeschlossenen Werte
 		 */
 		return checkNum(getCurrentRow(sudokuCells, currentCell.getY()), value)
 				&& checkNum(getCurrentCol(sudokuCells, currentCell.getX()), value)
