@@ -49,7 +49,7 @@ public class GameMaster {
 			fillRndVal();
 			solve.solveSudoku(sudokuCells, firstEmptyCell(sudokuCells[0][0]));
 			System.out.println("\n" + "Alles klar! Ein neues Spiel beginnt: \n");
-			difficultylevel();
+			difficultyLevel();
 			solve.digHoles(sudokuCells, minBlankCells, maxBlankCells);
 			System.out.println("Okay dann los! \n");
 			drawBoard();
@@ -107,7 +107,7 @@ public class GameMaster {
 		return 0;
 	}
 
-	private static void difficultylevel() {
+	private static void difficultyLevel() {
 		int intInp;
 		System.out.println("Bitte wähle deine Schwierigkeitsstufe: \n" + "1. Sehr leicht \n" + "2. Leicht \n"
 				+ "3. Mittel \n" + "4. Schwer");
@@ -138,12 +138,12 @@ public class GameMaster {
 				break;
 			default:
 				System.err.println("Ungültige Eingabe. Bitte wähle eine der vier Optionen.");
-				difficultylevel();
+				difficultyLevel();
 				break;
 			}
 		} catch (NumberFormatException e) {
-			System.err.println("Ungültige Eingabe. Bitte gib eine Zahl ein.");
-			difficultylevel();
+			System.err.println("Ungültige Eingabe. Bitte gib eine Zahl ein.\n");
+			difficultyLevel();
 		}
 	}
 
@@ -161,8 +161,8 @@ public class GameMaster {
 				+ "als auch von der Position der angegebenen Zahlen abhängen. \n\n" + "Im Hauptmenü kannst du: \n"
 				+ "1. Dir ein neues, ganz persönliches Sudoku generieren lassen und es lösen \n"
 				+ "2. Die vorgegebenen Zahlen eines Sudokus eingeben, um es von Sudokufy lösen zu lassen \n"
-				+ "3. Diese Erklärung verzückt anschmachten - so oft es dir beliebt \n"
-				+ "4. Sudokufy schweren Herzens beenden(, um nachts davon zu träumen) \n\n"
+				+ "3. Diese Erklärung nochmals aufrufen \n"
+				+ "4. Dieses Spiel beenden \n\n"
 				+ "Bitte wähle nun eine der folgenden beiden Optionen: \n" + "1. Zurück ins Hauptmenü \n"
 				+ "2. Sudokufy beenden.");
 
@@ -176,12 +176,12 @@ public class GameMaster {
 				exit();
 				break;
 			default:
-				System.err.println("Ungültige Eingabe. Bitte wähle eine der beiden Optionen.");
+				System.err.println("Ungültige Eingabe. Bitte wähle eine der beiden Optionen.\n");
 				explanation();
 				break;
 			}
 		} catch (NumberFormatException e) {
-			System.err.println("Ungültige Eingabe. Bitte wähle eine der beiden Optionen.");
+			System.err.println("Ungültige Eingabe. Bitte wähle eine der beiden Optionen.\n");
 			explanation();
 		}
 	}
@@ -469,7 +469,10 @@ public class GameMaster {
 		// Übergebe gefundene Zelle
 		return currentCell;
 	}
-
+	/**
+	 * Löst das Spieler-Sudoku, indem die eingegebenen Werte als fix gesetzt werden,
+	 * die Linked-List zurückgesetzt wird und der Algorithmus seine Arbeit macht.
+	 */
 	private static void solveOwnSudoku() {
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {

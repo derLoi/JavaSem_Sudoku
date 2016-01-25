@@ -3,7 +3,7 @@ package sudoku;
 import java.util.*;
 
 /**
- * Löst ein gegebenes Sudoku mit Hilfe eines brute force Algorithmus.
+ * Löst ein gegebenes Sudoku mit Hilfe eines Backtracking Algorithmus.
  * 
  * @version 17/01/2016
  */
@@ -77,12 +77,12 @@ public class SudokuSolver {
 			// incrementiere die Zählvariable
 			steps++;
 			if (steps > 10000000) {
-				System.out.println("Nä! Dat dauert mir zulang. Verfatz disch!");
+				System.out.println("Nä! Dat dauert mir zu lang. Ich brech ab.");
 				break;
 			}
 		}
 		// Nutzer-Feedback: wie schnell konnte das Sudoku gelöst werden
-		// System.out.println("Solved: it took me " + steps + " iterations to solve this sudoku puzzle for you!");
+		// System.out.println("Gelöst: Es hat " + steps + " Schritte gebraucht, um das Sudoku zu lösen!");
 		Cells lastCell = sudokuCells[8][8];
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
@@ -96,7 +96,18 @@ public class SudokuSolver {
 		}
 		currentCell.setNextCell(sudokuCells[0][0]);
 	}
-
+	/**
+	 * Methode 'gräbt Löcher' in das komplett gelöste Sudoku, die Anzahl
+	 * der freien Stellen wird zufällig, je nach Schwierigkeitslevel, bestimmt und
+	 * betroffene Stellen in eine 0 umgewandlt
+	 *  
+	 * @param sudokuCells
+	 * 			das Cells-Array des Sudoku Spielfelds.
+	 * @param min
+	 * 			minimalte Anzahl an freien Zellen im Sudoku 
+	 * @param max
+	 * 			maximalte Anzahl an freien Zellen im Sudoku
+	 */
 	public void digHoles(Cells[][] sudokuCells, int min, int max) {
 		Random rnd = new Random();
 		int rndY;
@@ -112,7 +123,7 @@ public class SudokuSolver {
 			if (currentCell.getValue() != 0) {
 				// Wert 0 = Zelle leer
 				currentCell.setValue(0);
-				// rndNum decrement
+				// dekrementiere ndNum 
 				rndNum--;
 			}
 		}

@@ -2,6 +2,14 @@ package sudoku;
 
 import java.util.Arrays;
 
+/**
+ * Diese Klasse enthält Methoden, die überprüfen ob Zahlen nach dem Sudokuregelwerk in
+ * beliebigen Zellen erlaubt sind, welche möglich sind und ob das Sudoku bereits gelöst ist.
+ * 
+ * @version 25/01/16
+ *
+ */
+
 public class SudokuChecker {
 	
 	/**
